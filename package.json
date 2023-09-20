@@ -1,0 +1,40 @@
+{
+  "name": "@1mill/with-kappa",
+  "version": "0.0.1",
+  "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
+  "source": "src/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "unpkg": "./dist/index.umd.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rm -rf ./dist && npm run build:browser && npm run build:node",
+    "build:browser": "microbundle --format modern,umd --external none",
+    "build:node": "microbundle --format cjs,esm",
+    "deploy": "npm run build && npm publish",
+    "dev": "microbundle watch",
+    "test": "node ./src/unit.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1mill/with-kappa.git"
+  },
+  "keywords": [
+    "lambda"
+  ],
+  "authors": [
+    "Erik Ekberg <nightw0lf@hotmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/1mill/with-kappa/issues"
+  },
+  "homepage": "https://github.com/1mill/with-kappa#readme",
+  "devDependencies": {
+    "microbundle": "^0.15.1"
+  }
+}
