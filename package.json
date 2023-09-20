@@ -36,5 +36,8 @@
   "homepage": "https://github.com/1mill/with-kappa#readme",
   "devDependencies": {
     "microbundle": "^0.15.1"
+  },
+  "dependencies": {
+    "mongodb": "^6.1.0"
   }
 }
