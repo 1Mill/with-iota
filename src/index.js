@@ -1,3 +1,11 @@
+import { Mongo } from './utils/mongo.js'
+import { fetchEnv } from './fetchEnv.js'
+
+const mongo = new Mongo({
+	db:  fetchEnv(['MILL_KAPPA_DB']),
+	uri: fetchEnv(['MILL_KAPPA_URI']),
+})
+
 const journal = new Journal({})
 
 const rapids = 'TODO'
