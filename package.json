@@ -17,7 +17,7 @@
     "build:node": "microbundle --format cjs,esm",
     "deploy": "npm run build && npm publish",
     "dev": "microbundle watch",
-    "test": "node ./src/unit.test.js"
+    "test": "node ./src/index.test.js"
   },
   "repository": {
     "type": "git",
