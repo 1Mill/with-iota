@@ -30,7 +30,7 @@ export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		return response
 	} catch (err) {
-		// await journal.erase({ cloudevent })
+		await journal.erase({ cloudevent })
 		throw err
 	}
 }

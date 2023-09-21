@@ -35,4 +35,13 @@ export class Journal {
 		}
 		return { skip }
 	}
+
+	async erase({ cloudevent }) {
+		const collection = await this._collection()
+
+		// * Delete all records with the given cloudevents params in an
+		// * overabundance of caution that multiple records may exist.
+		const { id, source, type } = cloudevent
+		await collection.deleteMany({ id, source, type })
+	}
 }

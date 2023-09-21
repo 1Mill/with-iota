@@ -12,10 +12,13 @@ const main = async () => {
 		}
 
 		return withKappa(cloudevent, {}, {
-			func: ({ cloudevent, ctx }) => console.log('Running: ', cloudevent)
+			func: ({ cloudevent, ctx }) => {
+				if (cloudevent.id === 0) { throw new Error('Testing Journal.erase') }
+				console.log('Running: ', cloudevent)
+			}
 		})
 	})
-	await Promise.all(promises)
+	await Promise.allSettled(promises)
 
 	console.log('Finished')
 
