@@ -2,12 +2,17 @@ import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
+export const SKIPPED = 'SKIPPED'
+
 const mongo = new Mongo({
 	db:  fetchEnv(['MILL_KAPPA_MONGO_DB']),
 	uri: fetchEnv(['MILL_KAPPA_MONGO_URI']),
 })
 
-const journal = new Journal({ mongo })
+const journal = new Journal({
+	id: fetchEnv(['MILL_KAPPA_JOURNAL_ID']),
+	mongo,
+})
 
 const rapids = 'TODO'
 
@@ -22,15 +27,13 @@ export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 	ctx.callbackWaitsForEmptyEventLoop = false
 
 	try {
-		const { response: cachedResponse, skip } = await journal.entry({ cloudevent })
-		if (skip) { return cachedResponse }
+		const { skip } = await journal.entry({ cloudevent })
+		if (skip) { return SKIPPED }
 
-		const response = func({ cloudevent, ctx, rapids, state })
-		// journal.adjust({ cloudevent, response })
-
-		return response
+		return func({ cloudevent, ctx, rapids, state })
 	} catch (err) {
 		await journal.erase({ cloudevent })
+
 		throw err
 	}
 }
