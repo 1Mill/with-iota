@@ -1,3 +1,4 @@
+import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
@@ -6,11 +7,11 @@ const mongo = new Mongo({
 	uri: fetchEnv(['MILL_KAPPA_URI']),
 })
 
-const journal = new Journal({})
+const journal = new Journal({ mongo })
 
 const rapids = 'TODO'
 
-const state = new State({ journal })
+const state = 'TODO'
 
 export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
@@ -25,11 +26,11 @@ export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 		if (skip) { return cachedResponse }
 
 		const response = func({ cloudevent, ctx, rapids, state })
-		journal.adjust({ cloudevent, response })
+		// journal.adjust({ cloudevent, response })
 
 		return response
 	} catch (err) {
-		await journal.erase({ cloudevent })
+		// await journal.erase({ cloudevent })
 		throw err
 	}
 }
