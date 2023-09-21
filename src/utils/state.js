@@ -19,7 +19,8 @@ export class State {
 				const promises = mutations.map(async m => {
 					const { recordType, create } = m
 					const collection = await this._collection(recordType)
-					return collection.insertOne({ ...create })
+
+					return collection.insertOne({ ...create }, { session })
 				})
 
 				await Promise.all(promises)
