@@ -4,7 +4,7 @@ import { withKappa } from './index.js'
 const main = async () => {
 	console.log('Starting...')
 
-	const promises = [...Array(10)].map(async (_, i) => {
+	const promises = [...Array(15)].map(async (_, i) => {
 		const cloudevent = {
 			...new Cloudevent({
 				data: JSON.stringify({ some: 'payload' }),
@@ -13,13 +13,23 @@ const main = async () => {
 				type: 'cmd.some-type.v0',
 				wschannel: 'some-prefix:my-channel-name#id=4321',
 			}),
-			id: i % 3, // ! Mutate id for testing purposes
+			id: i % 5, // ! Mutate id for testing purposes
 		}
 
 		return withKappa(cloudevent, {}, {
-			func: ({ cloudevent, ctx }) => {
+			func: async ({ cloudevent, ctx, state }) => {
 				const { id, type, source } = cloudevent
+
 				if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
+
+				await state.mutations([
+					{
+						recordId: null,
+						recordType: 'featureFlags',
+						create: { enabled: false, name: `FF#${id}` },
+					}
+				])
+
 				return { id, type, source }
 			}
 		})

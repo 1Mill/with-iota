@@ -1,5 +1,6 @@
 import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
+import { State } from './utils/state.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
 export const SKIPPED = 'SKIPPED'
@@ -16,7 +17,7 @@ const journal = new Journal({
 
 const rapids = 'TODO'
 
-const state = 'TODO'
+const state = new State({ mongo })
 
 export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
@@ -30,7 +31,8 @@ export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
 
-		return func({ cloudevent, ctx, rapids, state })
+		const response = await func({ cloudevent, ctx, rapids, state })
+		return response
 	} catch (err) {
 		await journal.erase({ cloudevent })
 
