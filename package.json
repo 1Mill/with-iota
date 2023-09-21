@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/1mill/with-kappa#readme",
   "devDependencies": {
+    "@1mill/cloudevents": "^4.6.1",
     "microbundle": "^0.15.1"
   },
   "dependencies": {
