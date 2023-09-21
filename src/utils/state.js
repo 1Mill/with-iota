@@ -28,5 +28,11 @@ export class State {
 		} finally {
 			await session.endSession();
 		}
+
+		// TODO: Either before or after mutations are applied to the state,
+		// TODO: save the raw form of the mutations to the journal. This way
+		// TODO: we can monitor which mutations are taking place and recreate
+		// TODO: the state by re-running the mutations without having to re-run
+		// TODO: the business logic itself.
 	}
 }
