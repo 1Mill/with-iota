@@ -1,3 +1,5 @@
+import { MongoClient } from 'mongodb'
+
 export class Mongo {
 	constructor({ db, uri }) {
 		// * Inputs
