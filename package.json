@@ -1,5 +1,5 @@
 {
-  "name": "@1mill/with-kappa",
+  "name": "@1mill/with-iota",
   "version": "0.0.1",
   "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
   "source": "src/index.js",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1mill/with-kappa.git"
+    "url": "git+https://github.com/1mill/with-iota.git"
   },
   "keywords": [
     "lambda"
@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/1mill/with-kappa/issues"
+    "url": "https://github.com/1mill/with-iota/issues"
   },
-  "homepage": "https://github.com/1mill/with-kappa#readme",
+  "homepage": "https://github.com/1mill/with-iota#readme",
   "devDependencies": {
     "@1mill/cloudevents": "^4.6.1",
     "microbundle": "^0.15.1"

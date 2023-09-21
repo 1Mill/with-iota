@@ -1,5 +1,5 @@
 import { Cloudevent } from '@1mill/cloudevents'
-import { withKappa } from './index.js'
+import { withIota } from './index.js'
 
 const main = async () => {
 	console.log('Starting...')
@@ -16,7 +16,7 @@ const main = async () => {
 			id: i % 5, // ! Mutate id for testing purposes
 		}
 
-		return withKappa(cloudevent, {}, {
+		return withIota(cloudevent, {}, {
 			func: async ({ cloudevent, ctx, state }) => {
 				const { id, type, source } = cloudevent
 

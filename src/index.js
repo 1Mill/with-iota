@@ -19,7 +19,7 @@ const rapids = 'TODO'
 
 const state = new State({ mongo })
 
-export const withKappa = async (cloudevent = {}, ctx = {}, { func }) => {
+export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
 	// * AWS from closing the connection. This way, the connection remains
 	// * open and ready for immediate use whenever the next cloudevent
