@@ -1,5 +1,5 @@
 import { Mongo } from './utils/mongo.js'
-import { fetchEnv } from './fetchEnv.js'
+import { fetchEnv } from './utils/fetchEnv.js'
 
 const mongo = new Mongo({
 	db:  fetchEnv(['MILL_KAPPA_DB']),
