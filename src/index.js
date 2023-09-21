@@ -3,8 +3,8 @@ import { Mongo } from './utils/mongo.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
 const mongo = new Mongo({
-	db:  fetchEnv(['MILL_KAPPA_DB']),
-	uri: fetchEnv(['MILL_KAPPA_URI']),
+	db:  fetchEnv(['MILL_KAPPA_MONGO_DB']),
+	uri: fetchEnv(['MILL_KAPPA_MONGO_URI']),
 })
 
 const journal = new Journal({ mongo })
