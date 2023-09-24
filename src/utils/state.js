@@ -1,5 +1,7 @@
 export class State {
-	constructor({ mongo }) {
+	constructor({ cloudevent, journal, mongo }) {
+		this.cloudevent = cloudevent
+		this.journal = journal
 		this.mongo = mongo
 	}
 
@@ -16,23 +18,17 @@ export class State {
 
 		try {
 			await session.withTransaction(async () => {
-				const promises = mutations.map(async m => {
+				await Promise.all(mutations.map(async m => {
 					const { recordType, create } = m
 					const collection = await this._collection(recordType)
 
 					return collection.insertOne({ ...create }, { session })
-				})
+				}))
 
-				await Promise.all(promises)
+				await this.journal.done({ cloudevent: this.cloudevent, mutations })
 			})
 		} finally {
 			await session.endSession();
 		}
-
-		// TODO: Either before or after mutations are applied to the state,
-		// TODO: save the raw form of the mutations to the journal. This way
-		// TODO: we can monitor which mutations are taking place and recreate
-		// TODO: the state by re-running the mutations without having to re-run
-		// TODO: the business logic itself.
 	}
 }

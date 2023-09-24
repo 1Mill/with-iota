@@ -19,6 +19,16 @@ export class Journal {
 		return collection
 	}
 
+	async done({ cloudevent, mutations }) {
+		const collection = await this._collection()
+
+		const { id, source, type } = cloudevent
+
+		const filter = { id, source, type, [KEY]: this.id }
+		const update = { $set: { endedAt: new Date(), mutations } }
+		await collection.updateOne(filter, update)
+	}
+
 	async entry({ cloudevent }) {
 		const collection = await this._collection()
 
@@ -31,8 +41,12 @@ export class Journal {
 			// ! Do not mutate the original cloudevent, so create and mutate
 			// ! a clone of the cloudevent.
 			const ce = {
+				// ! Place journal attributes after spread so that they
+				// ! cannot be overwritten by cloudevent attributes.
 				...cloudevent,
-				[KEY]: this.id // ! Place after spread so that it cannot be overwritten
+				[KEY]: this.id,
+				startedAt: new Date(),
+				// ! ---
 			}
 
 			// * The insert will fail if this cloudevent is a duplicate because

@@ -17,8 +17,6 @@ const journal = new Journal({
 
 const rapids = 'TODO'
 
-const state = new State({ mongo })
-
 export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
 	// * AWS from closing the connection. This way, the connection remains
@@ -31,6 +29,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
 
+		const state = new State({ cloudevent, journal, mongo })
 		const response = await func({ cloudevent, ctx, rapids, state })
 		return response
 	} catch (err) {
