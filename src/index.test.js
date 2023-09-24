@@ -4,7 +4,7 @@ import { withIota } from './index.js'
 const main = async () => {
 	console.log('Starting...')
 
-	const promises = [...Array(15)].map(async (_, i) => {
+	const promises = [...Array(20)].map(async (_, i) => {
 		const cloudevent = {
 			...new Cloudevent({
 				data: JSON.stringify({ some: 'payload' }),
@@ -20,6 +20,9 @@ const main = async () => {
 			const { id, type, source } = cloudevent
 
 			if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
+
+			const sleepForMs = Math.floor(Math.random() * 7000)
+			await new Promise((res) => setTimeout(res, sleepForMs))
 
 			await state.mutate([
 				{
