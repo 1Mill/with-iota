@@ -16,23 +16,23 @@ const main = async () => {
 			id: i % 5, // ! Mutate id for testing purposes
 		}
 
-		return withIota(cloudevent, {}, {
-			func: async ({ cloudevent, ctx, state }) => {
-				const { id, type, source } = cloudevent
+		const func = async ({ cloudevent, ctx, state }) => {
+			const { id, type, source } = cloudevent
 
-				if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
+			if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
 
-				await state.mutations([
-					{
-						recordId: null,
-						recordType: 'featureFlags',
-						create: { enabled: false, name: `FF#${id}` },
-					}
-				])
+			await state.mutations([
+				{
+					recordId: null,
+					recordType: 'featureFlags',
+					create: { enabled: false, name: `FF#${id}` },
+				}
+			])
 
-				return { id, type, source }
-			}
-		})
+			return { id, type, source }
+		}
+
+		return withIota(cloudevent, {}, { func })
 	})
 
 	const results = await Promise.allSettled(promises)
