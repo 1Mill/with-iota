@@ -10,7 +10,7 @@ export class State {
 		return collection
 	}
 
-	async mutations(mutations = []) {
+	async mutate(mutations = []) {
 		const { client } = await this.mongo.connect()
 		const session = client.startSession()
 

@@ -21,7 +21,7 @@ const main = async () => {
 
 			if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
 
-			await state.mutations([
+			await state.mutate([
 				{
 					recordId: null,
 					recordType: 'featureFlags',
