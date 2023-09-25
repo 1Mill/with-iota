@@ -23,9 +23,9 @@ export class Journal {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
 			'cloudevent.type': cloudevent.type,
-			id: this.id,
+			'service.id': this.id,
 		}
-		const update = { $set: { endedAt: new Date(), mutations } }
+		const update = { $set: { 'service.endedAt': new Date().toISOString(), mutations } }
 
 		const collection = await this._collection()
 		await collection.updateOne(filter, update)
@@ -35,16 +35,18 @@ export class Journal {
 		const collection = await this._collection()
 
 		// * Create an index to make each journal entry unique.
-		await collection.createIndex({ id: 1, 'cloudevent.id': 1, 'cloudevent.source': 1, 'cloudevent.type': 1 }, { unique: true })
+		await collection.createIndex({ 'cloudevent.id': 1, 'cloudevent.source': 1, 'cloudevent.type': 1, 'service.id': 1 }, { unique: true })
 
 		// * Check if a journal entry for a given cloudevent has already run.
 		let skip = false
 		try {
 			const entry = {
 				cloudevent,
-				id: this.id,
-				startedAt: new Date(),
-				endedAt: null,
+				service: {
+					id: this.id,
+					startedAt: new Date().toISOString(),
+					endedAt: null,
+				},
 				mutations: null,
 			}
 
@@ -69,7 +71,7 @@ export class Journal {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
 			'cloudevent.type': cloudevent.type,
-			id: this.id,
+			'service.id': this.id,
 		})
 	}
 }
