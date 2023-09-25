@@ -1,3 +1,4 @@
+import sortKeys from 'sort-keys'
 import { nanoid } from 'nanoid'
 
 // * Actions
@@ -34,7 +35,7 @@ export class State {
 				m.id ??= nanoid()
 			}
 
-			return m
+			return sortKeys(m, { deep: true })
 		})
 
 		try {

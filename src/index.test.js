@@ -28,7 +28,7 @@ const main = async () => {
 			await state.mutate([
 				{
 					action: CREATE,
-					props: { enabled: false, name: `FF#${id}` },
+					props: { name: `FF#${id}`, enabled: false },
 					type: FEATURE_FLAG,
 				}
 			])
