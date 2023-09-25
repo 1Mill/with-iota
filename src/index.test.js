@@ -17,7 +17,7 @@ const main = async () => {
 			id: i % 5, // ! Modify id for testing purposes
 		}
 
-		const func = async ({ cloudevent, ctx, state }) => {
+		const func = async ({ cloudevent, ctx, rapids, state }) => {
 			if (cloudevent.id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
@@ -33,6 +33,11 @@ const main = async () => {
 
 			const collection = await state.collection(FEATURE_FLAG)
 			const featureFlag = await collection.findOne({ id: mutations[0].id })
+
+			await rapids.async({
+				data: `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`,
+				type: 'fct.feature-flag-created.v0',
+			})
 
 			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
 		}

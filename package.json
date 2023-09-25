@@ -35,10 +35,10 @@
   },
   "homepage": "https://github.com/1mill/with-iota#readme",
   "devDependencies": {
-    "@1mill/cloudevents": "^4.6.1",
     "microbundle": "^0.15.1"
   },
   "dependencies": {
+    "@1mill/cloudevents": "^4.6.1",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
     "sort-keys": "^5.0.0"

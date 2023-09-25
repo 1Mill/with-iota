@@ -1,9 +1,12 @@
 import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
+import { Rapids } from './utils/rapids.js'
 import { State } from './utils/state.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
 export const SKIPPED = 'SKIPPED'
+
+const SERVICE_ID = fetchEnv(['MILL_KAPPA_SERVICE_ID'])
 
 const mongo = new Mongo({
 	db:  fetchEnv(['MILL_KAPPA_MONGO_DB']),
@@ -11,11 +14,9 @@ const mongo = new Mongo({
 })
 
 const journal = new Journal({
-	id: fetchEnv(['MILL_KAPPA_JOURNAL_ID']),
+	id: SERVICE_ID,
 	mongo,
 })
-
-const rapids = 'TODO'
 
 export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
@@ -29,7 +30,9 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
 
+		const rapids = new Rapids({ cloudevent, source: SERVICE_ID })
 		const state = new State({ cloudevent, journal, mongo })
+
 		const response = await func({ cloudevent, ctx, rapids, state })
 
 		return response
