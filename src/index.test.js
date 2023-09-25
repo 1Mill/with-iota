@@ -11,7 +11,7 @@ const main = async () => {
 				data: JSON.stringify({ some: 'payload' }),
 				originactor: 'user:admin#id=1234',
 				source: 'some-source',
-				type: 'cmd.some-type.v0',
+				type: 'cmd.create-feature-flag.v0',
 				wschannel: 'some-prefix:my-channel-name#id=4321',
 			}),
 			id: i % 5, // ! Modify id for testing purposes
@@ -35,7 +35,7 @@ const main = async () => {
 			const featureFlag = await collection.findOne({ id: mutations[0].id })
 
 			await rapids.async({
-				data: `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`,
+				data: { id: featureFlag.id },
 				type: 'fct.feature-flag-created.v0',
 			})
 
