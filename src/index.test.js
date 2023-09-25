@@ -14,7 +14,7 @@ const main = async () => {
 				type: 'cmd.some-type.v0',
 				wschannel: 'some-prefix:my-channel-name#id=4321',
 			}),
-			id: i % 5, // ! Mutate id for testing purposes
+			id: i % 5, // ! Modify id for testing purposes
 		}
 
 		const func = async ({ cloudevent, ctx, state }) => {
