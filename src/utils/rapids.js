@@ -6,11 +6,17 @@ export class Rapids {
 		this.source = source
 	}
 
-	async async({ data, type }) {
+	async async(params) {
+		const { data, datacontenttype } = params
+
+		const dataParams = typeof data !== 'undefined' && typeof datacontenttype === 'undefined'
+			? { data: JSON.stringify(data), datacontenttype: 'application/json' }
+			: { data, datacontenttype }
+
 		const ce = new Cloudevent({
-			data: typeof data !== 'undefined' ? JSON.stringify(data) : data,
+			...params,
+			...dataParams,
 			source: this.source,
-			type,
 		}).origin({ cloudevent: this.originCloudevent })
 
 		console.log(ce)
