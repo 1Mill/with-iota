@@ -31,8 +31,10 @@ const main = async () => {
 				}
 			])
 
+			const collection = await state.collection(FEATURE_FLAG)
+			const featureFlag = await collection.findOne({ id: mutations[0].id })
 
-			return `Created Feature Flag ${mutations[0].props.name} (${mutations[0].id})`
+			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
 		}
 
 		return withIota(cloudevent, {}, { func })

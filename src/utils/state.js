@@ -17,7 +17,7 @@ export class State {
 		this.mongo = mongo
 	}
 
-	async #collection(name) {
+	async collection(name) {
 		const { db } = await this.mongo.connect()
 		const collection = db.collection(name)
 
@@ -53,7 +53,7 @@ export class State {
 					if (type !== FEATURE_FLAG) { throw new Error(`Mutation type "${type}" is not valid`) }
 					if (version !== v2023_09_27) { throw new Error(`Mutation version "${version}" is not valid`) }
 
-					const collection = await this.#collection(type)
+					const collection = await this.collection(type)
 
 					return collection.insertOne({ ...props, id }, { session })
 				})
