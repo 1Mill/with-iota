@@ -11,7 +11,7 @@ export class Journal {
 		this.mongo = mongo
 	}
 
-	async _collection() {
+	async #collection() {
 		const { db } = await this.mongo.connect()
 		const collection = db.collection(COLLECTION_NAME)
 
@@ -27,12 +27,12 @@ export class Journal {
 		}
 		const update = { $set: { 'service.endedAt': new Date().toISOString(), mutations } }
 
-		const collection = await this._collection()
+		const collection = await this.#collection()
 		await collection.updateOne(filter, update)
 	}
 
 	async entry({ cloudevent }) {
-		const collection = await this._collection()
+		const collection = await this.#collection()
 
 		// * Create an index to make each journal entry unique.
 		await collection.createIndex({ 'cloudevent.id': 1, 'cloudevent.source': 1, 'cloudevent.type': 1, 'service.id': 1 }, { unique: true })
@@ -63,7 +63,7 @@ export class Journal {
 	}
 
 	async erase({ cloudevent }) {
-		const collection = await this._collection()
+		const collection = await this.#collection()
 
 		// * Delete all records with the given cloudevents params in an
 		// * overabundance of caution that multiple records may exist.
