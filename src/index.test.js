@@ -18,9 +18,7 @@ const main = async () => {
 		}
 
 		const func = async ({ cloudevent, ctx, state }) => {
-			const { id, type, source } = cloudevent
-
-			if (id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
+			if (cloudevent.id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
@@ -28,7 +26,7 @@ const main = async () => {
 			const mutations = await state.mutate([
 				{
 					action: CREATE,
-					props: { name: `FF#${id}`, enabled: false },
+					props: { name: `FF#${cloudevent.id}`, enabled: false },
 					type: FEATURE_FLAG,
 				}
 			])
