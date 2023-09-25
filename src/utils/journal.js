@@ -1,5 +1,4 @@
 const COLLECTION_NAME = 'journalEntries'
-const KEY = 'id'
 const MONGODB_DUPLICATE_ERROR_CODE = 11000
 
 export class Journal {
