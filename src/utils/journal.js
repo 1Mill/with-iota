@@ -1,5 +1,5 @@
 const COLLECTION_NAME = 'journalEntries'
-const KEY = 'serviceId'
+const KEY = 'id'
 const MONGODB_DUPLICATE_ERROR_CODE = 11000
 
 export class Journal {
@@ -20,42 +20,44 @@ export class Journal {
 	}
 
 	async done({ cloudevent, mutations }) {
-		const collection = await this._collection()
-
-		const { id, source, type } = cloudevent
-
-		const filter = { id, source, type, [KEY]: this.id }
+		const filter = {
+			'cloudevent.id': cloudevent.id,
+			'cloudevent.source': cloudevent.source,
+			'cloudevent.type': cloudevent.type,
+			id: this.id,
+		}
 		const update = { $set: { endedAt: new Date(), mutations } }
+
+		const collection = await this._collection()
 		await collection.updateOne(filter, update)
 	}
 
 	async entry({ cloudevent }) {
 		const collection = await this._collection()
 
-		// * Create unique index for cloudevents
-		await collection.createIndex({ [KEY]: 1, id: 1, source: 1, type: 1 }, { unique: true })
+		// * Create an index to make each journal entry unique.
+		await collection.createIndex({ id: 1, 'cloudevent.id': 1, 'cloudevent.source': 1, 'cloudevent.type': 1 }, { unique: true })
 
-		// * Check if this cloudevent has already been run.
+		// * Check if a journal entry for a given cloudevent has already run.
 		let skip = false
 		try {
-			// ! Do not mutate the original cloudevent, so create and mutate
-			// ! a clone of the cloudevent.
-			const ce = {
-				// ! Place journal attributes after spread so that they
-				// ! cannot be overwritten by cloudevent attributes.
-				...cloudevent,
-				[KEY]: this.id,
+			const entry = {
+				cloudevent,
+				id: this.id,
 				startedAt: new Date(),
-				// ! ---
+				endedAt: null,
+				mutations: null,
 			}
 
-			// * The insert will fail if this cloudevent is a duplicate because
-			// * of the unique index we created above.
-			await collection.insertOne(ce)
+			// * This insert will fail if the entry already exists because
+			// * of the unique index we created previously.
+			await collection.insertOne(entry)
 		} catch(err) {
+			// * Throw all errors except for our expected duplicate errors.
 			if (err.code !== MONGODB_DUPLICATE_ERROR_CODE) { throw err }
 			skip = true
 		}
+
 		return { skip }
 	}
 
@@ -64,7 +66,11 @@ export class Journal {
 
 		// * Delete all records with the given cloudevents params in an
 		// * overabundance of caution that multiple records may exist.
-		const { id, source, type } = cloudevent
-		await collection.deleteMany({ [KEY]: this.id, id, source, type })
+		await collection.deleteMany({
+			'cloudevent.id': cloudevent.id,
+			'cloudevent.source': cloudevent.source,
+			'cloudevent.type': cloudevent.type,
+			id: this.id,
+		})
 	}
 }
