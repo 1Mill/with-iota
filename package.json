@@ -39,6 +39,7 @@
     "microbundle": "^0.15.1"
   },
   "dependencies": {
-    "mongodb": "^6.1.0"
+    "mongodb": "^6.1.0",
+    "nanoid": "^5.0.1"
   }
 }

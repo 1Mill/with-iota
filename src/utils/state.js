@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 export class State {
 	constructor({ cloudevent, journal, mongo }) {
 		this.cloudevent = cloudevent
@@ -16,16 +18,23 @@ export class State {
 		const { client } = await this.mongo.connect()
 		const session = client.startSession()
 
+		const computedMutations = mutations.map(m => {
+			m.create.id = m.recordId ?? nanoid()
+			m.version   = '2023-09-27'
+
+			return m
+		})
+
 		try {
 			await session.withTransaction(async () => {
-				await Promise.all(mutations.map(async m => {
+				await Promise.all(computedMutations.map(async m => {
 					const { recordType, create } = m
 					const collection = await this._collection(recordType)
 
-					return collection.insertOne({ ...create }, { session })
+					return collection.insertOne(create, { session })
 				}))
 
-				await this.journal.done({ cloudevent: this.cloudevent, mutations })
+				await this.journal.done({ cloudevent: this.cloudevent, mutations: computedMutations })
 			})
 		} finally {
 			await session.endSession();
