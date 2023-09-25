@@ -25,7 +25,7 @@ const main = async () => {
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
 
-			await state.mutate([
+			const mutations = await state.mutate([
 				{
 					action: CREATE,
 					props: { name: `FF#${id}`, enabled: false },
@@ -33,7 +33,8 @@ const main = async () => {
 				}
 			])
 
-			return { id, type, source }
+
+			return `Created Feature Flag ${mutations[0].props.name} (${mutations[0].id})`
 		}
 
 		return withIota(cloudevent, {}, { func })

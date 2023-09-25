@@ -66,5 +66,7 @@ export class State {
 		} finally {
 			await session.endSession();
 		}
+
+		return computedMutations
 	}
 }
