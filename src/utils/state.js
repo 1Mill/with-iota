@@ -1,4 +1,13 @@
-import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid'
+
+// * Actions
+export const CREATE = 'create'
+
+// * Collections
+export const FEATURE_FLAG = 'featureFlags'
+
+// * Versions
+export const v2023_09_27 = '2023-09-27'
 
 export class State {
 	constructor({ cloudevent, journal, mongo }) {
@@ -19,8 +28,11 @@ export class State {
 		const session = client.startSession()
 
 		const computedMutations = mutations.map(m => {
-			m.create.id = m.recordId ?? nanoid()
-			m.version   = '2023-09-27'
+			m.version ??= v2023_09_27
+
+			if (m.action === CREATE) {
+				m.id ??= nanoid()
+			}
 
 			return m
 		})
@@ -28,10 +40,21 @@ export class State {
 		try {
 			await session.withTransaction(async () => {
 				await Promise.all(computedMutations.map(async m => {
-					const { recordType, create } = m
-					const collection = await this._collection(recordType)
+					const {
+						action,
+						id,
+						props,
+						type,
+						version,
+					} = m
 
-					return collection.insertOne(create, { session })
+					if (action !== CREATE) { throw new Error(`Mutation action "${type} is not valid`) }
+					if (type !== FEATURE_FLAG) { throw new Error(`Mutation type "${type}" is not valid`) }
+					if (version !== v2023_09_27) { throw new Error(`Mutation version "${version}" is not valid`) }
+
+					const collection = await this._collection(type)
+
+					return collection.insertOne({ ...props, id }, { session })
 				}))
 
 				await this.journal.done({ cloudevent: this.cloudevent, mutations: computedMutations })

@@ -1,5 +1,6 @@
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
+import { CREATE, FEATURE_FLAG } from './utils/state.js';
 
 const main = async () => {
 	console.log('Starting...')
@@ -26,9 +27,9 @@ const main = async () => {
 
 			await state.mutate([
 				{
-					recordId: null,
-					recordType: 'featureFlags',
-					create: { enabled: false, name: `FF#${id}` },
+					action: CREATE,
+					props: { enabled: false, name: `FF#${id}` },
+					type: FEATURE_FLAG,
 				}
 			])
 
