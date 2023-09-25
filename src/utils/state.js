@@ -40,7 +40,7 @@ export class State {
 
 		try {
 			await session.withTransaction(async () => {
-				await Promise.all(computedMutations.map(async m => {
+				const mutationPromises = computedMutations.map(async m => {
 					const {
 						action,
 						id,
@@ -56,9 +56,12 @@ export class State {
 					const collection = await this._collection(type)
 
 					return collection.insertOne({ ...props, id }, { session })
-				}))
+				})
 
-				await this.journal.done({ cloudevent: this.cloudevent, mutations: computedMutations })
+				await Promise.all([
+					...mutationPromises,
+					this.journal.done({ cloudevent: this.cloudevent, mutations: computedMutations })
+				])
 			})
 		} finally {
 			await session.endSession();
