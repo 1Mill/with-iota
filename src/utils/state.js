@@ -1,8 +1,10 @@
 import sortKeys from 'sort-keys'
 import { nanoid } from 'nanoid'
+import { throwError } from './throwError.js'
 
 // * Actions
 export const CREATE = 'create'
+export const DELETE = 'delete'
 
 // * Collections
 export const FEATURE_FLAG = 'featureFlags'
@@ -49,13 +51,20 @@ export class State {
 						version,
 					} = m
 
-					if (action !== CREATE) { throw new Error(`Mutation action "${type} is not valid`) }
-					if (type !== FEATURE_FLAG) { throw new Error(`Mutation type "${type}" is not valid`) }
-					if (version !== v2023_09_27) { throw new Error(`Mutation version "${version}" is not valid`) }
+					if (!id) { throwError(`Mutation id is required`) }
+					if (type !== FEATURE_FLAG) { throwError(`Mutation type "${type}" is not valid`) }
+					if (version !== v2023_09_27) { throwError(`Mutation version "${version}" is not valid`) }
 
 					const collection = await this.collection(type)
 
-					return collection.insertOne({ ...props, id }, { session })
+					switch (action) {
+						case CREATE:
+							return collection.insertOne({ ...props, id }, { session })
+						case DELETE:
+							return collection.deleteOne({ id }, { session })
+						default:
+							throwError(`Mutation action "${action}" is not valid`)
+					}
 				})
 
 				await Promise.all([
