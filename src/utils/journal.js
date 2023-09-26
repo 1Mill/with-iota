@@ -49,7 +49,7 @@ export class Journal {
 					startedAt: new Date().toISOString(),
 					endedAt: null,
 				},
-				mutations: [],
+				mutations: null,
 			}
 
 			// * This insert will fail if the entry already exists because
