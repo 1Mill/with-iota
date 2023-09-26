@@ -24,4 +24,9 @@ export class Mongo {
 
 		return { client, db }
 	}
+
+	async collection(name) {
+		const { db } = await this.connect()
+		return db.collection(name)
+	}
 }

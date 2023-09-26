@@ -10,13 +10,6 @@ export class State {
 		this.mutations = []
 	}
 
-	async collection(name) {
-		const { db } = await this.mongo.connect()
-		const collection = db.collection(name)
-
-		return collection
-	}
-
 	async commit() {
 		const { client } = await this.mongo.connect()
 		const session = client.startSession()
@@ -32,7 +25,7 @@ export class State {
 						version,
 					} = m
 
-					const collection = await this.collection(type)
+					const collection = await this.mongo.collection(type)
 
 					switch (action) {
 						case CREATE:
