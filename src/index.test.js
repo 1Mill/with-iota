@@ -17,59 +17,62 @@ const main = async () => {
 			id: i % 5, // ! Modify id for testing purposes
 		}
 
-		const func = async ({ cloudevent, ctx, rapids, state }) => {
+		const func = async ({ cloudevent, ctx, mutation, rapids }) => {
 			if (cloudevent.id === 0) { throw new Error('This error is expected and is testing the Journal.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
 
 			// * Create feature flag
-			const mutation = state.stage({
+			const {
+				id: featureFlagId,
+				props: { name: featureFlagName },
+			} = mutation.stage({
 				action: CREATE,
 				props: { name: `FF#${cloudevent.id}`, enabled: false },
 				type: FEATURE_FLAG,
 			})
 
 			// * Add to feature flag count
-			state.stage({
+			mutation.stage({
 				action: INCREMENT,
-				id: mutation.id,
+				id: featureFlagId,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
-			state.stage({
+			mutation.stage({
 				action: INCREMENT,
-				id: mutation.id,
+				id: featureFlagId,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
-			state.stage({
+			mutation.stage({
 				action: INCREMENT,
-				id: mutation.id,
+				id: featureFlagId,
 				props: { count: 2 },
 				type: FEATURE_FLAG,
 			})
 
 			// * Set attribute to a specific value on the feature flag
-			state.stage({
+			mutation.stage({
 				action: SET,
-				id: mutation.id,
+				id: featureFlagId,
 				props: { hello: 'world' },
 				type: FEATURE_FLAG,
 			})
 
 			// * Delete created feature flag
-			state.stage({
+			mutation.stage({
 				action: DELETE,
-				id: mutation.id,
+				id: featureFlagId,
 				type: FEATURE_FLAG,
 			})
 
 
-			// TODO: In a similar way to how mutations are aggrigated and finally committed after
+			// TODO: In a similar way to how mutation are aggrigated and finally committed after
 			// TODO: the `return` happens. We must also accumulate rapids.async cloudevents so
 			// TODO: that they are only emitted after as well. Ideally as part of the same DB
-			// TODO: transaction so the mutations are reversed whenever an error occures during
+			// TODO: transaction so the mutation are reversed whenever an error occures during
 			// TODO: this final "commit" set.
 
 			// await rapids.async([
@@ -83,7 +86,7 @@ const main = async () => {
 			// 	},
 			// ])
 
-			return `Created and then deleted feature flag ${mutation.props.name} (${mutation.id})`
+			return `Created and then deleted feature flag ${featureFlagName} (${featureFlagId})`
 		}
 
 		return withIota(cloudevent, {}, { func })
