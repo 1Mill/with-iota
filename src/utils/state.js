@@ -1,4 +1,4 @@
-import { CREATE, DELETE, INCREMENT, Mutation } from './mutation.js'
+import { CREATE, DELETE, INCREMENT, Mutation, SET } from './mutation.js'
 import { throwError } from './throwError.js'
 
 export class State {
@@ -43,6 +43,9 @@ export class State {
 							break
 						case INCREMENT:
 							await collection.updateOne({ id }, { $inc: props }, { session })
+							break
+						case SET:
+							await collection.updateOne({ id }, { $set: props }, { session })
 							break
 						default:
 							throwError(`Mutation action "${action}" for version "${version}" is not implemented`)

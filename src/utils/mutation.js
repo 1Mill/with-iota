@@ -6,8 +6,9 @@ import { throwError } from './throwError.js'
 export const CREATE = 'create'
 export const DELETE = 'delete'
 export const INCREMENT = 'increment'
+export const SET = 'set'
 
-const VALID_ACTIONS = Object.freeze([CREATE, DELETE, INCREMENT])
+const VALID_ACTIONS = Object.freeze([CREATE, DELETE, INCREMENT, SET])
 
 // * Collections
 export const FEATURE_FLAG = 'featureFlags'

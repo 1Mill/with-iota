@@ -1,4 +1,4 @@
-import { CREATE, DELETE, FEATURE_FLAG, INCREMENT } from './utils/mutation.js'
+import { CREATE, DELETE, FEATURE_FLAG, INCREMENT, SET } from './utils/mutation.js'
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
 
@@ -47,6 +47,13 @@ const main = async () => {
 				action: INCREMENT,
 				id: mutation.id,
 				props: { count: 2 },
+				type: FEATURE_FLAG,
+			})
+
+			state.queueMutation({
+				action: SET,
+				id: mutation.id,
+				props: { hello: 'world' },
 				type: FEATURE_FLAG,
 			})
 
