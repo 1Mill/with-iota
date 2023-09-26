@@ -2,8 +2,7 @@ import { CREATE, DELETE, INCREMENT, Mutation, SET } from './mutation.js'
 import { throwError } from './throwError.js'
 
 export class State {
-	constructor({ cloudevent, mongo }) {
-		this.cloudevent = cloudevent
+	constructor({ mongo }) {
 		this.mongo = mongo
 
 		this.mutations = []
