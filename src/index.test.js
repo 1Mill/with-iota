@@ -44,6 +44,12 @@ const main = async () => {
 				}
 			])
 
+			// TODO: In a similar way to how mutations are aggrigated and finally committed after
+			// TODO: the `return` happens. We must also accumulate rapids.async cloudevents so
+			// TODO: that they are only emitted after as well. Ideally as part of the same DB
+			// TODO: transaction so the mutations are reversed whenever an error occures during
+			// TODO: this final "commit" set.
+
 			// await rapids.async([
 			// 	{
 			// 		data: { id: featureFlag.id },
