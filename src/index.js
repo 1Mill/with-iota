@@ -1,6 +1,7 @@
 import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { Rapids } from './utils/rapids.js'
+import { SKIP_ERASE } from './utils/throwError.js'
 import { State } from './utils/state.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
@@ -37,7 +38,9 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		return response
 	} catch (err) {
-		await journal.erase({ cloudevent })
+		if (!err.message.startsWith(SKIP_ERASE)) {
+			await journal.erase({ cloudevent })
+		}
 
 		throw err
 	}

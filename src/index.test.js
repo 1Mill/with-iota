@@ -1,6 +1,6 @@
+import { CREATE, FEATURE_FLAG } from './utils/state.js';
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
-import { CREATE, FEATURE_FLAG } from './utils/state.js';
 
 const main = async () => {
 	console.log('Starting...')
@@ -36,7 +36,7 @@ const main = async () => {
 
 			await rapids.async({
 				data: { id: featureFlag.id },
-				type: 'fct.feature-flag-created.v0',
+				// type: 'fct.feature-flag-created.v0',
 			})
 
 			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
