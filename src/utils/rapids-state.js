@@ -4,7 +4,7 @@ import { throwError } from './throwError.js'
 
 const client = new EventBridgeClient()
 
-export class Rapids {
+export class RapidsState {
 	constructor({ cloudevent, source }) {
 		this.originCloudevent = cloudevent
 		this.source = source

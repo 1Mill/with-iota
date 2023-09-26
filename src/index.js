@@ -1,7 +1,7 @@
 import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { MutationState } from './utils/mutation-state.js'
-import { Rapids } from './utils/rapids.js'
+import { RapidsState } from './utils/rapids-state.js'
 import { SKIP_ERASE } from './utils/throwError.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
@@ -32,7 +32,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		if (skip) { return SKIPPED }
 
 		const mutation = new MutationState({ mongo })
-		const rapids   = new Rapids({ cloudevent, source: SERVICE_ID })
+		const rapids   = new RapidsState({ cloudevent, source: SERVICE_ID })
 
 		const response = await func({ cloudevent, ctx, mutation, rapids })
 
