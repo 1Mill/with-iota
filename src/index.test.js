@@ -1,4 +1,4 @@
-import { CREATE, FEATURE_FLAG } from './utils/state.js';
+import { CREATE, DELETE, FEATURE_FLAG } from './utils/state.js'
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
 
@@ -34,18 +34,26 @@ const main = async () => {
 			const collection = await state.collection(FEATURE_FLAG)
 			const featureFlag = await collection.findOne({ id: mutations[0].id })
 
-			await rapids.async([
+			await state.mutate([
 				{
-					data: { id: featureFlag.id },
-					type: 'cmd.placeholder.v0',
-				},
-				{
-					data: { id: featureFlag.id },
-					type: 'fct.feature-flag-created.v0',
-				},
+					action: DELETE,
+					id: featureFlag.id,
+					type: FEATURE_FLAG,
+				}
 			])
 
-			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
+			// await rapids.async([
+			// 	{
+			// 		data: { id: featureFlag.id },
+			// 		type: 'cmd.placeholder.v0',
+			// 	},
+			// 	{
+			// 		data: { id: featureFlag.id },
+			// 		type: 'fct.feature-flag-created.v0',
+			// 	},
+			// ])
+
+			return `Created and then deleted Feature Flag ${featureFlag.name} (${featureFlag.id})`
 		}
 
 		return withIota(cloudevent, {}, { func })
