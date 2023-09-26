@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@1mill/cloudevents": "^4.6.1",
+    "@aws-sdk/client-eventbridge": "^3.418.0",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
     "sort-keys": "^5.0.0"

@@ -5,6 +5,9 @@ services:
     command: sh -c "npm install && npm run test"
     image: node:18-alpine
     environment:
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_REGION: $AWS_REGION
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
       MILL_KAPPA_MONGO_DB: some-databse
       MILL_KAPPA_MONGO_URI: mongodb://mongo:27017/
       MILL_KAPPA_SERVICE_ID: some-service-id

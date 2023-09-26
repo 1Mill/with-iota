@@ -36,7 +36,7 @@ const main = async () => {
 
 			await rapids.async({
 				data: { id: featureFlag.id },
-				// type: 'fct.feature-flag-created.v0',
+				type: 'cmd.placeholder.v0',
 			})
 
 			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
