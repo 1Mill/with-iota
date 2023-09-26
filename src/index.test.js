@@ -24,26 +24,26 @@ const main = async () => {
 			await new Promise((res) => setTimeout(res, sleepForMs))
 
 			// * Create feature flag
-			const mutation = state.queueMutation({
+			const mutation = state.stage({
 				action: CREATE,
 				props: { name: `FF#${cloudevent.id}`, enabled: false },
 				type: FEATURE_FLAG,
 			})
 
 			// * Add to feature flag count
-			state.queueMutation({
+			state.stage({
 				action: INCREMENT,
 				id: mutation.id,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
-			state.queueMutation({
+			state.stage({
 				action: INCREMENT,
 				id: mutation.id,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
-			state.queueMutation({
+			state.stage({
 				action: INCREMENT,
 				id: mutation.id,
 				props: { count: 2 },
@@ -51,7 +51,7 @@ const main = async () => {
 			})
 
 			// * Set attribute to a specific value on the feature flag
-			state.queueMutation({
+			state.stage({
 				action: SET,
 				id: mutation.id,
 				props: { hello: 'world' },
@@ -59,7 +59,7 @@ const main = async () => {
 			})
 
 			// * Delete created feature flag
-			state.queueMutation({
+			state.stage({
 				action: DELETE,
 				id: mutation.id,
 				type: FEATURE_FLAG,

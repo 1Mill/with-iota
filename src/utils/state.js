@@ -41,7 +41,7 @@ export class State {
 		return this.mutations
 	}
 
-	queueMutation(params) {
+	stage(params) {
 		const mutation = new Mutation(params)
 		this.mutations.push(mutation)
 
