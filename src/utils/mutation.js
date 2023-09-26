@@ -3,11 +3,11 @@ import { nanoid } from 'nanoid'
 import { throwError } from './throwError.js'
 
 // * Actions
-export const ADD = 'add'
 export const CREATE = 'create'
 export const DELETE = 'delete'
+export const INCREMENT = 'increment'
 
-const VALID_ACTIONS = Object.freeze([ADD, CREATE, DELETE])
+const VALID_ACTIONS = Object.freeze([CREATE, DELETE, INCREMENT])
 
 // * Collections
 export const FEATURE_FLAG = 'featureFlags'

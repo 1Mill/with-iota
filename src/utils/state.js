@@ -1,4 +1,4 @@
-import { ADD, CREATE, DELETE, Mutation } from './mutation.js'
+import { CREATE, DELETE, INCREMENT, Mutation } from './mutation.js'
 import { throwError } from './throwError.js'
 
 export class State {
@@ -35,14 +35,14 @@ export class State {
 					const collection = await this.collection(type)
 
 					switch (action) {
-						case ADD:
-							await collection.updateOne({ id }, { $inc: props }, { session })
-							break
 						case CREATE:
 							await collection.insertOne({ ...props, id }, { session })
 							break
 						case DELETE:
 							await collection.deleteOne({ id }, { session })
+							break
+						case INCREMENT:
+							await collection.updateOne({ id }, { $inc: props }, { session })
 							break
 						default:
 							throwError(`Mutation action "${action}" for version "${version}" is not implemented`)
