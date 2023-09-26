@@ -1,12 +1,13 @@
+import sortKeys from 'sort-keys'
 import { nanoid } from 'nanoid'
 import { throwError } from './throwError.js'
-import sortKeys from 'sort-keys';
 
 // * Actions
+export const ADD = 'add'
 export const CREATE = 'create'
 export const DELETE = 'delete'
 
-const VALID_ACTIONS = Object.freeze([CREATE, DELETE])
+const VALID_ACTIONS = Object.freeze([ADD, CREATE, DELETE])
 
 // * Collections
 export const FEATURE_FLAG = 'featureFlags'

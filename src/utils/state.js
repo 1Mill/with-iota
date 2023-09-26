@@ -1,4 +1,4 @@
-import { CREATE, DELETE, Mutation } from './mutation.js'
+import { ADD, CREATE, DELETE, Mutation } from './mutation.js'
 import { throwError } from './throwError.js'
 
 export class State {
@@ -35,6 +35,9 @@ export class State {
 					const collection = await this.collection(type)
 
 					switch (action) {
+						case ADD:
+							await collection.updateOne({ id }, { $inc: props }, { session })
+							break
 						case CREATE:
 							await collection.insertOne({ ...props, id }, { session })
 							break
