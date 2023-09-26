@@ -23,7 +23,7 @@ export class State {
 
 		try {
 			await session.withTransaction(async () => {
-				const promises = this.mutations.map(async m => {
+				for (const m of this.mutations) {
 					const {
 						action,
 						id,
@@ -36,15 +36,15 @@ export class State {
 
 					switch (action) {
 						case CREATE:
-							return collection.insertOne({ ...props, id }, { session })
+							await collection.insertOne({ ...props, id }, { session })
+							break
 						case DELETE:
-							return collection.deleteOne({ id }, { session })
+							await collection.deleteOne({ id }, { session })
+							break
 						default:
 							throwError(`Mutation action "${action}" for version "${version}" is not implemented`)
 					}
-				})
-
-				await Promise.all(promises)
+				}
 
 				await this.journal.done({ cloudevent: this.cloudevent, mutations: this.mutations })
 			})
