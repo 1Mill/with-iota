@@ -5,11 +5,11 @@ export class State {
 	constructor({ mongo }) {
 		this.mongo = mongo
 
-		this.mutations = []
+		this.stagedMutations = []
 	}
 
 	async commit({ session }) {
-		for (const m of this.mutations) {
+		for (const m of this.stagedMutations) {
 			const {
 				action,
 				id,
@@ -38,12 +38,13 @@ export class State {
 			}
 		}
 
-		return this.mutations
+		return this.stagedMutations
 	}
 
 	stage(params) {
 		const mutation = new Mutation(params)
-		this.mutations.push(mutation)
+
+		this.stagedMutations.push(mutation)
 
 		return mutation
 	}
