@@ -50,6 +50,7 @@ const main = async () => {
 				type: FEATURE_FLAG,
 			})
 
+			// * Set attribute to a specific value on the feature flag
 			state.queueMutation({
 				action: SET,
 				id: mutation.id,
