@@ -1,7 +1,7 @@
 import { CREATE, DELETE, INCREMENT, Mutation, SET } from './mutation.js'
 import { throwError } from './throwError.js'
 
-export class State {
+export class MutationState {
 	constructor({ mongo }) {
 		this.mongo = mongo
 
