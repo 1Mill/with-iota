@@ -69,7 +69,7 @@ export class State {
 
 				await Promise.all([
 					...mutationPromises,
-					this.journal.done({ cloudevent: this.cloudevent, mutations: computedMutations })
+					this.journal.addMutations({ cloudevent: this.cloudevent, mutations: computedMutations })
 				])
 			})
 		} finally {

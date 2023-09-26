@@ -18,14 +18,14 @@ export class Journal {
 		return collection
 	}
 
-	async done({ cloudevent, mutations }) {
+	async addMutations({ cloudevent, mutations }) {
 		const filter = {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
 			'cloudevent.type': cloudevent.type,
 			'service.id': this.id,
 		}
-		const update = { $set: { 'service.endedAt': new Date().toISOString(), mutations } }
+		const update = { $push: { mutations } }
 
 		const collection = await this.#collection()
 		await collection.updateOne(filter, update)
@@ -47,7 +47,7 @@ export class Journal {
 					startedAt: new Date().toISOString(),
 					endedAt: null,
 				},
-				mutations: null,
+				mutations: [],
 			}
 
 			// * This insert will fail if the entry already exists because
