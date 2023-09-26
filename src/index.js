@@ -36,6 +36,8 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		const response = await func({ cloudevent, ctx, rapids, state })
 
+		await journal.done({ cloudevent })
+
 		return response
 	} catch (err) {
 		if (!err.message.startsWith(SKIP_ERASE)) {

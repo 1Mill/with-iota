@@ -31,6 +31,19 @@ export class Journal {
 		await collection.updateOne(filter, update)
 	}
 
+	async done({ cloudevent }) {
+		const filter = {
+			'cloudevent.id': cloudevent.id,
+			'cloudevent.source': cloudevent.source,
+			'cloudevent.type': cloudevent.type,
+			'service.id': this.id,
+		}
+		const update = { $set: { 'service.endedAt': new Date().toISOString() } }
+
+		const collection = await this.#collection()
+		await collection.updateOne(filter, update)
+	}
+
 	async entry({ cloudevent }) {
 		const collection = await this.#collection()
 
