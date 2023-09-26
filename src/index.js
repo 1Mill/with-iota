@@ -32,7 +32,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		if (skip) { return SKIPPED }
 
 		const rapids = new Rapids({ cloudevent, source: SERVICE_ID })
-		const state = new State({ mongo })
+		const state  = new State({ mongo })
 
 		const response = await func({ cloudevent, ctx, rapids, state })
 
