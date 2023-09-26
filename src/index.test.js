@@ -1,4 +1,4 @@
-import { CREATE, DELETE, FEATURE_FLAG } from './utils/state.js'
+import { CREATE, DELETE, FEATURE_FLAG } from './utils/mutation.js'
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
 
@@ -23,26 +23,20 @@ const main = async () => {
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
 
-			const mutations = await state.mutate([
-				{
-					action: CREATE,
-					props: { name: `FF#${cloudevent.id}`, enabled: false },
-					type: FEATURE_FLAG,
-				}
-			])
+			// * Create feature flag
+			const mutation = state.queueMutation({
+				action: CREATE,
+				props: { name: `FF#${cloudevent.id}`, enabled: false },
+				type: FEATURE_FLAG,
+			})
 
-			const featureFlag = {
-				...mutations[0].props,
-				id: mutations[0].id,
-			}
+			// * Delete created feature flag
+			state.queueMutation({
+				action: DELETE,
+				id: mutation.id,
+				type: FEATURE_FLAG,
+			})
 
-			await state.mutate([
-				{
-					action: DELETE,
-					id: featureFlag.id,
-					type: FEATURE_FLAG,
-				}
-			])
 
 			// TODO: In a similar way to how mutations are aggrigated and finally committed after
 			// TODO: the `return` happens. We must also accumulate rapids.async cloudevents so
@@ -61,7 +55,7 @@ const main = async () => {
 			// 	},
 			// ])
 
-			return `Created and then deleted feature flag ${featureFlag.name} (${featureFlag.id})`
+			return `Created and then deleted feature flag ${mutation.props.name} (${mutation.id})`
 		}
 
 		return withIota(cloudevent, {}, { func })

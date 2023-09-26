@@ -1,16 +1,5 @@
-import sortKeys from 'sort-keys'
-import { nanoid } from 'nanoid'
+import { CREATE, DELETE, Mutation } from './mutation.js'
 import { throwError } from './throwError.js'
-
-// * Actions
-export const CREATE = 'create'
-export const DELETE = 'delete'
-
-// * Collections
-export const FEATURE_FLAG = 'featureFlags'
-
-// * Versions
-export const v2023_09_27 = '2023-09-27'
 
 export class State {
 	constructor({ cloudevent, journal, mongo }) {
@@ -43,10 +32,6 @@ export class State {
 						version,
 					} = m
 
-					if (!id) { throwError(`Mutation id is required`) }
-					if (type !== FEATURE_FLAG) { throwError(`Mutation type "${type}" is not valid`) }
-					if (version !== v2023_09_27) { throwError(`Mutation version "${version}" is not valid`) }
-
 					const collection = await this.collection(type)
 
 					switch (action) {
@@ -55,7 +40,7 @@ export class State {
 						case DELETE:
 							return collection.deleteOne({ id }, { session })
 						default:
-							throwError(`Mutation action "${action}" is not valid`)
+							throwError(`Mutation action "${action}" for version "${version}" is not implemented`)
 					}
 				})
 
@@ -68,19 +53,10 @@ export class State {
 		}
 	}
 
-	async mutate(mutations = []) {
-		const computedMutations = mutations.map(m => {
-			m.version ??= v2023_09_27
+	queueMutation(params) {
+		const mutation = new Mutation(params)
+		this.mutations.push(mutation)
 
-			if (m.action === CREATE) {
-				m.id ??= nanoid()
-			}
-
-			return sortKeys(m, { deep: true })
-		})
-
-		computedMutations.forEach(m => this.mutations.push(m))
-
-		return computedMutations
+		return mutation
 	}
 }
