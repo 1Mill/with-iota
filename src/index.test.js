@@ -34,10 +34,16 @@ const main = async () => {
 			const collection = await state.collection(FEATURE_FLAG)
 			const featureFlag = await collection.findOne({ id: mutations[0].id })
 
-			await rapids.async({
-				data: { id: featureFlag.id },
-				type: 'cmd.placeholder.v0',
-			})
+			await rapids.async([
+				{
+					data: { id: featureFlag.id },
+					type: 'cmd.placeholder.v0',
+				},
+				{
+					data: { id: featureFlag.id },
+					type: 'fct.feature-flag-created.v0',
+				},
+			])
 
 			return `Created Feature Flag ${featureFlag.name} (${featureFlag.id})`
 		}

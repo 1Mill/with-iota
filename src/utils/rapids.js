@@ -10,30 +10,30 @@ export class Rapids {
 		this.source = source
 	}
 
-	async async(params) {
+	async async(array) {
 		try {
-			const { data, datacontenttype } = params
+			const Entries = array.map(params => {
+				const { data, datacontenttype } = params
 
-			const dataParams = typeof data !== 'undefined' && typeof datacontenttype === 'undefined'
-				? { data: JSON.stringify(data), datacontenttype: 'application/json' }
-				: { data, datacontenttype }
+				const dataParams = typeof data !== 'undefined' && typeof datacontenttype === 'undefined'
+					? { data: JSON.stringify(data), datacontenttype: 'application/json' }
+					: { data, datacontenttype }
 
-			const ce = new Cloudevent({
-				...params,
-				...dataParams,
-				source: this.source,
-			}).origin({ cloudevent: this.originCloudevent })
+				const ce = new Cloudevent({
+					...params,
+					...dataParams,
+					source: this.source,
+				}).origin({ cloudevent: this.originCloudevent })
 
-			const command = new PutEventsCommand({
-				Entries: [
-					{
-						Detail: JSON.stringify(ce),
-						DetailType: 'cloudevent',
-						EventBusName: 'default',
-						Source: this.source,
-					}
-				]
+				return {
+					Detail: JSON.stringify(ce),
+					DetailType: 'cloudevent',
+					EventBusName: 'default',
+					Source: ce.source
+				}
 			})
+
+			const command = new PutEventsCommand({ Entries })
 
 			await client.send(command)
 		} catch (err) {
