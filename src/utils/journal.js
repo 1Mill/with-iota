@@ -11,7 +11,7 @@ export class Journal {
 		this.mongo = mongo
 	}
 
-	async done({ cloudevent, mutations }) {
+	async done({ cloudevent, mutations = [], session }) {
 		const filter = {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
@@ -19,11 +19,15 @@ export class Journal {
 			'service.id': this.id,
 		}
 		const update = {
-			$set: { 'service.endedAt': new Date().toISOString(), mutations },
+			$set: {
+				'service.endedAt': new Date().toISOString(),
+				mutations,
+			},
 		}
+		const options = { session }
 
 		const collection = await this.mongo.collection(COLLECTION_NAME)
-		await collection.updateOne(filter, update)
+		await collection.updateOne(filter, update, options)
 	}
 
 	async entry({ cloudevent }) {

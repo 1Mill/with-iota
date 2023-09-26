@@ -32,11 +32,21 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		if (skip) { return SKIPPED }
 
 		const rapids = new Rapids({ cloudevent, source: SERVICE_ID })
-		const state = new State({ cloudevent, journal, mongo })
+		const state = new State({ cloudevent, mongo })
 
 		const response = await func({ cloudevent, ctx, rapids, state })
 
-		await state.commit()
+
+		const { client } = await mongo.connect()
+		const session = client.startSession()
+		try {
+			await session.withTransaction(async () => {
+				const mutations = await state.commit({ session })
+				await journal.done({ cloudevent, mutations, session })
+			})
+		} finally {
+			await session.endSession();
+		}
 
 		return response
 	} catch (err) {
