@@ -26,8 +26,7 @@ export class Journal {
 			'service.id': this.id,
 		}
 		const update = {
-			$push: { mutations },
-			$set:  { 'service.endedAt': new Date().toISOString() },
+			$set: { 'service.endedAt': new Date().toISOString(), mutations },
 		}
 
 		const collection = await this.#collection()
