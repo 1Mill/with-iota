@@ -18,27 +18,17 @@ export class Journal {
 		return collection
 	}
 
-	async addMutations({ cloudevent, mutations }) {
+	async done({ cloudevent, mutations }) {
 		const filter = {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
 			'cloudevent.type': cloudevent.type,
 			'service.id': this.id,
 		}
-		const update = { $push: { mutations } }
-
-		const collection = await this.#collection()
-		await collection.updateOne(filter, update)
-	}
-
-	async done({ cloudevent }) {
-		const filter = {
-			'cloudevent.id': cloudevent.id,
-			'cloudevent.source': cloudevent.source,
-			'cloudevent.type': cloudevent.type,
-			'service.id': this.id,
+		const update = {
+			$push: { mutations },
+			$set:  { 'service.endedAt': new Date().toISOString() },
 		}
-		const update = { $set: { 'service.endedAt': new Date().toISOString() } }
 
 		const collection = await this.#collection()
 		await collection.updateOne(filter, update)

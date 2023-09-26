@@ -36,7 +36,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		const response = await func({ cloudevent, ctx, rapids, state })
 
-		await journal.done({ cloudevent })
+		await state.commit()
 
 		return response
 	} catch (err) {

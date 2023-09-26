@@ -17,6 +17,8 @@ export class State {
 		this.cloudevent = cloudevent
 		this.journal = journal
 		this.mongo = mongo
+
+		this.mutations = []
 	}
 
 	async collection(name) {
@@ -26,23 +28,13 @@ export class State {
 		return collection
 	}
 
-	async mutate(mutations = []) {
+	async commit() {
 		const { client } = await this.mongo.connect()
 		const session = client.startSession()
 
-		const computedMutations = mutations.map(m => {
-			m.version ??= v2023_09_27
-
-			if (m.action === CREATE) {
-				m.id ??= nanoid()
-			}
-
-			return sortKeys(m, { deep: true })
-		})
-
 		try {
 			await session.withTransaction(async () => {
-				const mutationPromises = computedMutations.map(async m => {
+				const promises = this.mutations.map(async m => {
 					const {
 						action,
 						id,
@@ -67,14 +59,27 @@ export class State {
 					}
 				})
 
-				await Promise.all([
-					...mutationPromises,
-					this.journal.addMutations({ cloudevent: this.cloudevent, mutations: computedMutations })
-				])
+				await Promise.all(promises)
+
+				await this.journal.done({ cloudevent: this.cloudevent, mutations: this.mutations })
 			})
 		} finally {
 			await session.endSession();
 		}
+	}
+
+	async mutate(mutations = []) {
+		const computedMutations = mutations.map(m => {
+			m.version ??= v2023_09_27
+
+			if (m.action === CREATE) {
+				m.id ??= nanoid()
+			}
+
+			return sortKeys(m, { deep: true })
+		})
+
+		computedMutations.forEach(m => this.mutations.push(m))
 
 		return computedMutations
 	}
