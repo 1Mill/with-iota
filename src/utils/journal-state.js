@@ -1,14 +1,16 @@
-const COLLECTION_NAME = 'journalEntries'
 const MONGODB_DUPLICATE_ERROR_CODE = 11000
 
 export class JournalState {
-	constructor({ id, mongo }) {
+	constructor({ id, mongo, name }) {
 		// * A unique identifier for the service processing the cloudevent so multiple
 		// * instances of the same service do not process the same cloudevent.
 		this.id = id
 		if (!this.id) { throw new Error('JournalState "id" is required') }
 
 		this.mongo = mongo
+
+		this.name = name
+		if (!this.id) { throw new Error('JournalState "name" is required') }
 	}
 
 	async done({ cloudevent, mutations = [], rapids = [] }) {
@@ -26,12 +28,12 @@ export class JournalState {
 			},
 		}
 
-		const collection = await this.mongo.collection(COLLECTION_NAME)
+		const collection = await this.mongo.collection(this.name)
 		await collection.updateOne(filter, update)
 	}
 
 	async entry({ cloudevent }) {
-		const collection = await this.mongo.collection(COLLECTION_NAME)
+		const collection = await this.mongo.collection(this.name)
 
 		// * Create an index to make each journal entry unique.
 		await collection.createIndex({ 'cloudevent.id': 1, 'cloudevent.source': 1, 'cloudevent.type': 1, 'service.id': 1 }, { unique: true })
@@ -63,7 +65,7 @@ export class JournalState {
 	}
 
 	async erase({ cloudevent }) {
-		const collection = await this.mongo.collection(COLLECTION_NAME)
+		const collection = await this.mongo.collection(this.name)
 
 		// * Delete all records with the given cloudevents params in an
 		// * overabundance of caution that multiple records may exist.

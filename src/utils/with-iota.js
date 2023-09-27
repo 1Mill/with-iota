@@ -7,13 +7,18 @@ import { fetchEnv } from './fetchEnv.js'
 export const SKIPPED = 'SKIPPED'
 
 const EVENETBUS_NAME = fetchEnv(['MILL_KAPPA_EVENTBUS_NAME'], 'default')
+const JOURNAL_NAME   = fetchEnv(['MILL_KAPPA_JOURNAL_NAME'], 'iotaJournalEntries')
 const MONGO_DB       = fetchEnv(['MILL_KAPPA_MONGO_DB'])
 const MONGO_URI      = fetchEnv(['MILL_KAPPA_MONGO_URI'])
 const SERVICE_ID     = fetchEnv(['MILL_KAPPA_SERVICE_ID'])
 
 const mongo = new Mongo({ db: MONGO_DB, uri: MONGO_URI })
 
-const journal = new JournalState({ id: SERVICE_ID, mongo })
+const journal = new JournalState({
+	id: SERVICE_ID,
+	mongo,
+	name: JOURNAL_NAME,
+})
 
 export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
