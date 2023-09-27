@@ -12,15 +12,14 @@ export class RapidsState {
 	}
 
 	async commit() {
+		if (this.staged.length <= 0) { return }
+
 		const Entries = this.staged.map(cloudevent => ({
 			Detail: JSON.stringify(cloudevent),
 			DetailType: 'cloudevent',
 			EventBusName: 'default',
 			Source: cloudevent.source,
 		}))
-
-		// TODO: A command cannot have 0 entries. So, if the number
-		// TODO: of entries is 0 do not send any commands.
 
 		console.log({ Entries })
 
