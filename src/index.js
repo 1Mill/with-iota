@@ -36,7 +36,6 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		const response = await func({ cloudevent, ctx, mutation, rapids })
 
-
 		const { client } = await mongo.connect()
 		const session = client.startSession()
 		try {
