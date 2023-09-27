@@ -1,10 +1,19 @@
 import { Cloudevent } from '@1mill/cloudevents'
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
 import { cluster } from 'radash'
+import { fetchEnv } from './fetchEnv.js'
 
 const MAX_ENTRIES_PER_COMMAND = 10
 
-const client = new EventBridgeClient()
+const client = new EventBridgeClient({
+	credentials: {
+		accessKeyId:     fetchEnv(['MILL_IOTA_AWS_ACCESS_KEY_ID',     'AWS_ACCESS_KEY_ID']),
+		secretAccessKey: fetchEnv(['MILL_IOTA_AWS_SECRET_ACCESS_KEY', 'AWS_SECRET_ACCESS_KEY']),
+		sessionToken:    fetchEnv(['MILL_IOTA_AWS_SESSION_TOKEN',     'AWS_SESSION_TOKEN']),
+	},
+	endpoint: fetchEnv(['MILL_IOTA_AWS_ENDPOINT', 'AWS_ENDPOINT']),
+	region:   fetchEnv(['MILL_IOTA_AWS_REGION',   'AWS_REGION']),
+})
 
 export class RapidsState {
 	constructor({ cloudevent, eventBusName, source }) {
