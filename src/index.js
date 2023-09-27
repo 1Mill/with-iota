@@ -1,4 +1,4 @@
-import { Journal } from './utils/journal.js'
+import { JournalState } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { MutationState } from './utils/mutation-state.js'
 import { RapidsState } from './utils/rapids-state.js'
@@ -13,7 +13,7 @@ const SERVICE_ID     = fetchEnv(['MILL_KAPPA_SERVICE_ID'])
 
 const mongo = new Mongo({ db: MONGO_DB, uri: MONGO_URI })
 
-const journal = new Journal({ id: SERVICE_ID, mongo })
+const journal = new JournalState({ id: SERVICE_ID, mongo })
 
 export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop

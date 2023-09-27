@@ -1,12 +1,12 @@
 const COLLECTION_NAME = 'journalEntries'
 const MONGODB_DUPLICATE_ERROR_CODE = 11000
 
-export class Journal {
+export class JournalState {
 	constructor({ id, mongo }) {
 		// * A unique identifier for the service processing the cloudevent so multiple
 		// * instances of the same service do not process the same cloudevent.
 		this.id = id
-		if (!this.id) { throw new Error('Journal "id" is required') }
+		if (!this.id) { throw new Error('JournalState "id" is required') }
 
 		this.mongo = mongo
 	}
