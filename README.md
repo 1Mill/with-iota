@@ -77,7 +77,7 @@ Despite the straggered nature of staged mutations and staged rapids cloudevents,
 
 | Lifecycle | Commit order |
 | --- | --- |
-| ![Image communicating lifecycle](./images/lifecycle.jpg) | ![Image communicating that all mutations are applied first followed by all rapids cloudevents](/images/commit-order.jpg) |
+| ![Image communicating lifecycle](./images/lifecycle.jpg) | ![Image communicating that all mutations are applied first followed by all rapids cloudevents](./images/commit-order.jpg) |
 
 ## Development
 
