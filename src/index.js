@@ -2,7 +2,6 @@ import { Journal } from './utils/journal.js'
 import { Mongo } from './utils/mongo.js'
 import { MutationState } from './utils/mutation-state.js'
 import { RapidsState } from './utils/rapids-state.js'
-import { SKIP_ERASE } from './utils/throwError.js'
 import { fetchEnv } from './utils/fetchEnv.js'
 
 export const SKIPPED = 'SKIPPED'
@@ -57,11 +56,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		return response
 	} catch (err) {
-		// TODO: Remove SKIP_ERASE errors because we do not want
-		// TODO: cloudevent valiadation errors to skip any more.
-		if (!err.message.startsWith(SKIP_ERASE)) {
-			await journal.erase({ cloudevent })
-		}
+		await journal.erase({ cloudevent })
 
 		throw err
 	} finally {

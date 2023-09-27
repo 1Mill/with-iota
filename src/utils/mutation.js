@@ -1,6 +1,5 @@
 import sortKeys from 'sort-keys'
 import { nanoid } from 'nanoid'
-import { throwError } from './throwError.js'
 
 // * Actions
 export const CREATE = 'create'
@@ -29,21 +28,21 @@ export class Mutation {
 		version,
 	}) {
 		this.action = action
-		if (!VALID_ACTIONS.includes(this.action)) { throwError(`Mutation action "${this.action}" is not valid`) }
+		if (!VALID_ACTIONS.includes(this.action)) { throw new Error(`Mutation action "${this.action}" is not valid`) }
 
 		this.id = action === CREATE
 			? id || nanoid()
 			: id
-		if (!this.id) { throwError('Mutation id is required') }
-		if (typeof this.id !== 'string') { throwError('Mutation id must be a string') }
+		if (!this.id) { throw new Error('Mutation id is required') }
+		if (typeof this.id !== 'string') { throw new Error('Mutation id must be a string') }
 
 		this.props = sortKeys(props || {}, { deep: true })
-		if (typeof this.props !== 'object') { throwError('Mutation props must be an object') }
+		if (typeof this.props !== 'object') { throw new Error('Mutation props must be an object') }
 
 		this.type = type
-		if (!VALID_COLLECTIONS.includes(this.type)) { throwError(`Mutation type "${this.type}" is not valid`) }
+		if (!VALID_COLLECTIONS.includes(this.type)) { throw new Error(`Mutation type "${this.type}" is not valid`) }
 
 		this.version = version || v2023_09_27
-		if (!VALID_VERSIONS.includes(this.version)) { throwError(`Mutation version "${this.version}" is not valid`) }
+		if (!VALID_VERSIONS.includes(this.version)) { throw new Error(`Mutation version "${this.version}" is not valid`) }
 	}
 }

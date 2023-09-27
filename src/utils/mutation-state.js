@@ -1,5 +1,4 @@
 import { CREATE, DELETE, INCREMENT, Mutation, SET } from './mutation.js'
-import { throwError } from './throwError.js'
 
 export class MutationState {
 	constructor({ mongo }) {
@@ -34,7 +33,7 @@ export class MutationState {
 					await collection.updateOne({ id }, { $set: props }, { session })
 					break
 				default:
-					throwError(`Mutation action "${action}" for version "${version}" is not implemented`)
+					throw new Error(`Mutation action "${action}" for version "${version}" is not implemented`)
 			}
 		}
 	}
