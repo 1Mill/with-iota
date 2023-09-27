@@ -85,3 +85,9 @@ Despite the straggered nature of staged mutations and staged rapids cloudevents,
 1. Create `.env` file with with `MILL_IOTA_AWS_ACCESS_KEY_ID`, `MILL_IOTA_AWS_REGION`, and `MILL_IOTA_AWS_SECRET_ACCESS_KEY`.
 1. Run `docker compose up -d mongo mongo-admin`
 1. Run `docker compose up test`
+
+## Deploy
+
+1. Run `npm version (major|minor|patch)`
+1. Run `git push`
+1. Run `npm run deploy`
