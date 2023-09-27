@@ -57,6 +57,8 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 
 		return response
 	} catch (err) {
+		// TODO: Remove SKIP_ERASE errors because we do not want
+		// TODO: cloudevent valiadation errors to skip any more.
 		if (!err.message.startsWith(SKIP_ERASE)) {
 			await journal.erase({ cloudevent })
 		}
