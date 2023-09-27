@@ -48,6 +48,7 @@ export class Journal {
 					endedAt: null,
 				},
 				mutations: null,
+				rapids: null,
 			}
 
 			// * This insert will fail if the entry already exists because
