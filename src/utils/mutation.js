@@ -9,11 +9,6 @@ export const SET = 'set'
 
 const VALID_ACTIONS = Object.freeze([CREATE, DELETE, INCREMENT, SET])
 
-// * Collections
-export const FEATURE_FLAG = 'featureFlags'
-
-const VALID_COLLECTIONS = Object.freeze([FEATURE_FLAG])
-
 // * Versions
 export const v2023_09_27 = '2023-09-27'
 
@@ -40,7 +35,8 @@ export class Mutation {
 		if (typeof this.props !== 'object') { throw new Error('Mutation props must be an object') }
 
 		this.type = type
-		if (!VALID_COLLECTIONS.includes(this.type)) { throw new Error(`Mutation type "${this.type}" is not valid`) }
+		if (!this.type) { throw new Error('Mutation type is required') }
+		if (typeof this.type !== 'string') { throw new Error('Mutation id must be a string') }
 
 		this.version = version || v2023_09_27
 		if (!VALID_VERSIONS.includes(this.version)) { throw new Error(`Mutation version "${this.version}" is not valid`) }

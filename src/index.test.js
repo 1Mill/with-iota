@@ -1,6 +1,8 @@
-import { CREATE, DELETE, FEATURE_FLAG, INCREMENT, SET } from './utils/mutation.js'
+import { CREATE, DELETE, INCREMENT, SET } from './utils/mutation.js'
 import { Cloudevent } from '@1mill/cloudevents'
 import { withIota } from './index.js'
+
+const FEATURE_FLAG = 'featureFlags'
 
 const main = async () => {
 	console.log('Starting...')
