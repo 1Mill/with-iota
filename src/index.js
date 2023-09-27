@@ -24,7 +24,11 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	ctx.callbackWaitsForEmptyEventLoop = false
 
 	const mutation = new MutationState({ mongo })
-	const rapids = new RapidsState({ cloudevent, eventBusName: EVENETBUS_NAME, source: SERVICE_ID })
+	const rapids   = new RapidsState({
+		cloudevent,
+		eventBusName: EVENETBUS_NAME,
+		source: SERVICE_ID,
+	})
 
 	try {
 		const { skip } = await journal.entry({ cloudevent })
