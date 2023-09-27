@@ -1,4 +1,4 @@
-import { JournalState } from './utils/journal.js'
+import { JournalState } from './utils/journal-state.js'
 import { Mongo } from './utils/mongo.js'
 import { MutationState } from './utils/mutation-state.js'
 import { RapidsState } from './utils/rapids-state.js'
