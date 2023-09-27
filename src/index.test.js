@@ -1,6 +1,5 @@
-import { CREATE, DELETE, INCREMENT, SET } from './utils/mutation.js'
+import { CREATE, DELETE, INCREMENT, SET, withIota } from './index.js'
 import { Cloudevent } from '@1mill/cloudevents'
-import { withIota } from './index.js'
 
 const FEATURE_FLAG = 'featureFlags'
 
