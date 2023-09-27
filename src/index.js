@@ -6,6 +6,7 @@ import { fetchEnv } from './utils/fetchEnv.js'
 
 export const SKIPPED = 'SKIPPED'
 
+const EVENETBUS_NAME = fetchEnv(['MILL_KAPPA_EVENTBUS_NAME'], 'default')
 const MONGO_DB       = fetchEnv(['MILL_KAPPA_MONGO_DB'])
 const MONGO_URI      = fetchEnv(['MILL_KAPPA_MONGO_URI'])
 const SERVICE_ID     = fetchEnv(['MILL_KAPPA_SERVICE_ID'])
@@ -23,7 +24,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	ctx.callbackWaitsForEmptyEventLoop = false
 
 	const mutation = new MutationState({ mongo })
-	const rapids   = new RapidsState({ cloudevent, source: SERVICE_ID })
+	const rapids = new RapidsState({ cloudevent, eventBusName: EVENETBUS_NAME, source: SERVICE_ID })
 
 	try {
 		const { skip } = await journal.entry({ cloudevent })

@@ -7,7 +7,10 @@ const MAX_ENTRIES_PER_COMMAND = 10
 const client = new EventBridgeClient()
 
 export class RapidsState {
-	constructor({ cloudevent, source }) {
+	constructor({ cloudevent, eventBusName, source }) {
+		this.eventBusName = eventBusName
+		if (!this.eventBusName) { throw new Error('RapidsState eventBusName is required') }
+
 		this.originCloudevent = cloudevent
 		this.source = source
 
@@ -20,7 +23,7 @@ export class RapidsState {
 		const entries = this.staged.map(cloudevent => ({
 			Detail: JSON.stringify(cloudevent),
 			DetailType: 'application/cloudevents+json',
-			EventBusName: 'default',
+			EventBusName: this.eventBusName,
 			Source: cloudevent.source,
 		}))
 
