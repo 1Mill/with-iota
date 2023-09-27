@@ -27,12 +27,12 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	// * https://www.mongodb.com/docs/atlas/manage-connections-aws-lambda/#manage-connections-with-aws-lambda
 	ctx.callbackWaitsForEmptyEventLoop = false
 
+	const mutation = new MutationState({ mongo })
+	const rapids   = new RapidsState({ cloudevent, source: SERVICE_ID })
+
 	try {
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
-
-		const mutation = new MutationState({ mongo })
-		const rapids   = new RapidsState({ cloudevent, source: SERVICE_ID })
 
 		const response = await func({ cloudevent, ctx, mutation, rapids })
 
