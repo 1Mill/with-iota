@@ -11,7 +11,7 @@ export class JournalState {
 		this.mongo = mongo
 	}
 
-	async done({ cloudevent, mutations = [], rapids = [], session }) {
+	async done({ cloudevent, mutations = [], rapids = [] }) {
 		const filter = {
 			'cloudevent.id': cloudevent.id,
 			'cloudevent.source': cloudevent.source,
@@ -25,10 +25,9 @@ export class JournalState {
 				rapids,
 			},
 		}
-		const options = { session }
 
 		const collection = await this.mongo.collection(COLLECTION_NAME)
-		await collection.updateOne(filter, update, options)
+		await collection.updateOne(filter, update)
 	}
 
 	async entry({ cloudevent }) {

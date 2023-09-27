@@ -31,35 +31,42 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 	})
 
 	try {
+		// * Check for or add the cloudevent in the journal. If it exists,
+		// * do not process this cloudevent agian.
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
 
+		// * Run business logic.
 		const response = await func({ cloudevent, ctx, mutation, rapids })
 
+		// * Apply side effects from business logic to the system.
 		const { client } = await mongo.connect()
 		const session = client.startSession()
 		try {
 			await session.withTransaction(async () => {
-				await Promise.all([
-					journal.done({
-						cloudevent,
-						mutations: mutation.staged,
-						rapids: rapids.staged,
-						session,
-					}),
-					mutation.commit({ session }),
-				])
+				await mutation.commit({ session })
+
+				// ! Commit rapids after mutations so that any new
+				// ! database values are usable by other services.
+				await rapids.commit()
 			})
 		} finally {
 			await session.endSession();
 		}
 
+		// * Mark the journal entry as done.
+		await journal.done({
+			cloudevent,
+			mutations: mutation.staged,
+			rapids: rapids.staged,
+		})
+
 		return response
 	} catch (err) {
+		// * If any error occures, erase the cloudevent entry from
+		// * the journal so that processing may be attempted again.
 		await journal.erase({ cloudevent })
 
 		throw err
-	} finally {
-		await rapids.commit()
 	}
 }
