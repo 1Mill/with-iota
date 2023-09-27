@@ -36,8 +36,14 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		const { skip } = await journal.entry({ cloudevent })
 		if (skip) { return SKIPPED }
 
+		// * Try prasing JSON data to make data easier to work with for users.
+		const { data: rawData, datacontenttype } = cloudevent
+		const data = typeof rawData === 'string' && datacontenttype === 'application/json'
+			? JSON.parse(rawData)
+			: rawData
+
 		// * Run business logic.
-		const response = await func({ cloudevent, ctx, mutation, rapids })
+		const response = await func({ cloudevent, ctx, data, mutation, rapids })
 
 		// * Apply side effects from business logic to the system.
 		const { client } = await mongo.connect()

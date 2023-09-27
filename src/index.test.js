@@ -8,7 +8,7 @@ const main = async () => {
 	const promises = [...Array(20)].map(async (_, i) => {
 		const cloudevent = {
 			...new Cloudevent({
-				data: JSON.stringify({ some: 'payload' }),
+				data: JSON.stringify({ name:`FF#${i}`}),
 				originactor: 'user:admin#id=1234',
 				source: 'some-source',
 				type: 'cmd.create-feature-flag.v0',
@@ -17,38 +17,37 @@ const main = async () => {
 			id: i % 5, // ! Modify id for testing purposes
 		}
 
-		const func = async ({ cloudevent, ctx, mutation, rapids }) => {
+		const func = async ({ cloudevent, ctx, data, mutation, rapids }) => {
 			if (cloudevent.id === 0) { throw new Error('This error is expected and is testing the JournalState.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
 
-			// * Create feature flag
-			const {
-				id: featureFlagId,
-				props: { name: featureFlagName },
-			} = mutation.stage({
+			const { name } = data
+
+			// * Create feature flag and get generated ID from mutation
+			const { id } = mutation.stage({
 				action: CREATE,
-				props: { name: `FF#${cloudevent.id}`, enabled: false },
+				props: { name, enabled: false },
 				type: FEATURE_FLAG,
 			})
 
 			// * Add to feature flag count
 			mutation.stage({
 				action: INCREMENT,
-				id: featureFlagId,
+				id,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
 			mutation.stage({
 				action: INCREMENT,
-				id: featureFlagId,
+				id,
 				props: { count: -1 },
 				type: FEATURE_FLAG,
 			})
 			mutation.stage({
 				action: INCREMENT,
-				id: featureFlagId,
+				id,
 				props: { count: 2 },
 				type: FEATURE_FLAG,
 			})
@@ -56,7 +55,7 @@ const main = async () => {
 			// * Set attribute to a specific value on the feature flag
 			mutation.stage({
 				action: SET,
-				id: featureFlagId,
+				id,
 				props: { hello: 'world' },
 				type: FEATURE_FLAG,
 			})
@@ -64,22 +63,22 @@ const main = async () => {
 			// * Delete created feature flag
 			mutation.stage({
 				action: DELETE,
-				id: featureFlagId,
+				id,
 				type: FEATURE_FLAG,
 			})
 
 			// * Stage multiple cloudevents to be sent to the rapids
 			rapids.stage({
-				data: { id: featureFlagId },
+				data: { id },
 				type: 'cmd.placeholder.v0',
 			})
 
 			rapids.stage({
-				data: { id: featureFlagId },
+				data: { id },
 				type: 'fct.feature-flag-created.v0',
 			})
 
-			return `Created and then deleted feature flag ${featureFlagName} (${featureFlagId})`
+			return `Created and then deleted feature flag ${name} (${id})`
 		}
 
 		return withIota(cloudevent, {}, { func })
