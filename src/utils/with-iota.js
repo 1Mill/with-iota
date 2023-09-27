@@ -6,11 +6,11 @@ import { fetchEnv } from './fetchEnv.js'
 
 export const SKIPPED = 'SKIPPED'
 
-const EVENETBUS_NAME = fetchEnv(['MILL_KAPPA_EVENTBUS_NAME'], 'default')
-const JOURNAL_NAME   = fetchEnv(['MILL_KAPPA_JOURNAL_NAME'], 'iotaJournalEntries')
-const MONGO_DB       = fetchEnv(['MILL_KAPPA_MONGO_DB'])
-const MONGO_URI      = fetchEnv(['MILL_KAPPA_MONGO_URI'])
-const SERVICE_ID     = fetchEnv(['MILL_KAPPA_SERVICE_ID'])
+const EVENETBUS_NAME = fetchEnv(['MILL_IOTA_EVENTBUS_NAME'], 'default')
+const JOURNAL_NAME   = fetchEnv(['MILL_IOTA_JOURNAL_NAME'], 'iotaJournalEntries')
+const MONGO_DB       = fetchEnv(['MILL_IOTA_MONGO_DB'])
+const MONGO_URI      = fetchEnv(['MILL_IOTA_MONGO_URI'])
+const SERVICE_ID     = fetchEnv(['MILL_IOTA_SERVICE_ID'])
 
 const mongo = new Mongo({ db: MONGO_DB, uri: MONGO_URI })
 

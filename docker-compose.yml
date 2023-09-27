@@ -8,9 +8,9 @@ services:
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
       AWS_REGION: $AWS_REGION
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-      MILL_KAPPA_MONGO_DB: some-databse
-      MILL_KAPPA_MONGO_URI: mongodb://mongo:27017/
-      MILL_KAPPA_SERVICE_ID: some-service-id
+      MILL_IOTA_MONGO_DB: some-databse
+      MILL_IOTA_MONGO_URI: mongodb://mongo:27017/
+      MILL_IOTA_SERVICE_ID: some-service-id
     volumes:
       - ./:/app
     working_dir: /app
