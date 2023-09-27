@@ -68,23 +68,16 @@ const main = async () => {
 				type: FEATURE_FLAG,
 			})
 
+			// * Stage multiple cloudevents to be sent to the rapids
+			rapids.stage({
+				data: { id: featureFlagId },
+				type: 'cmd.placeholder.v0',
+			})
 
-			// TODO: In a similar way to how mutation are aggrigated and finally committed after
-			// TODO: the `return` happens. We must also accumulate rapids.async cloudevents so
-			// TODO: that they are only emitted after as well. Ideally as part of the same DB
-			// TODO: transaction so the mutation are reversed whenever an error occures during
-			// TODO: this final "commit" set.
-
-			// await rapids.async([
-			// 	{
-			// 		data: { id: featureFlag.id },
-			// 		type: 'cmd.placeholder.v0',
-			// 	},
-			// 	{
-			// 		data: { id: featureFlag.id },
-			// 		type: 'fct.feature-flag-created.v0',
-			// 	},
-			// ])
+			rapids.stage({
+				data: { id: featureFlagId },
+				type: 'fct.feature-flag-created.v0',
+			})
 
 			return `Created and then deleted feature flag ${featureFlagName} (${featureFlagId})`
 		}
