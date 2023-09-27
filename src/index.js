@@ -41,8 +41,15 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		const session = client.startSession()
 		try {
 			await session.withTransaction(async () => {
-				const comittedMutations = await mutation.commit({ session })
-				await journal.done({ cloudevent, mutations: comittedMutations, session })
+				await Promise.all([
+					journal.done({
+						cloudevent,
+						mutations: mutation.staged,
+						rapids: rapids.staged,
+						session,
+					}),
+					mutation.commit({ session }),
+				])
 			})
 		} finally {
 			await session.endSession();
@@ -55,5 +62,7 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 		}
 
 		throw err
+	} finally {
+		await rapids.commit()
 	}
 }

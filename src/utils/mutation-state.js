@@ -5,11 +5,11 @@ export class MutationState {
 	constructor({ mongo }) {
 		this.mongo = mongo
 
-		this.stagedMutations = []
+		this.staged = []
 	}
 
 	async commit({ session }) {
-		for (const m of this.stagedMutations) {
+		for (const m of this.staged) {
 			const {
 				action,
 				id,
@@ -37,14 +37,12 @@ export class MutationState {
 					throwError(`Mutation action "${action}" for version "${version}" is not implemented`)
 			}
 		}
-
-		return this.stagedMutations
 	}
 
 	stage(params) {
 		const mutation = new Mutation(params)
 
-		this.stagedMutations.push(mutation)
+		this.staged.push(mutation)
 
 		return mutation
 	}
