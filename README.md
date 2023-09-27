@@ -75,9 +75,9 @@ TODO
 
 Despite the straggered nature of staged mutations and staged rapids cloudevents, all mutations are applied first in order. Then, all rapids cloudevents are emitted in order.
 
-[[/images/lifecycle.jpg|Image communicating lifecycle]]
+![](./images/lifecycle.jpg|Image communicating lifecycle)
 
-[[/images/commit-order.jpg|Image communicating that all mutations are applied first followed by all rapids cloudevents]]
+![](/images/commit-order.jpg|Image communicating that all mutations are applied first followed by all rapids cloudevents)
 
 ## Development
 
