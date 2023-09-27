@@ -42,6 +42,7 @@
     "@aws-sdk/client-eventbridge": "^3.418.0",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
+    "radash": "^11.0.0",
     "sort-keys": "^5.0.0"
   }
 }

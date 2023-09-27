@@ -1,5 +1,8 @@
 import { Cloudevent } from '@1mill/cloudevents'
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
+import { cluster } from 'radash'
+
+const MAX_ENTRIES_PER_COMMAND = 10
 
 const client = new EventBridgeClient()
 
@@ -14,21 +17,20 @@ export class RapidsState {
 	async commit() {
 		if (this.staged.length <= 0) { return }
 
-		const Entries = this.staged.map(cloudevent => ({
+		const entries = this.staged.map(cloudevent => ({
 			Detail: JSON.stringify(cloudevent),
 			DetailType: 'cloudevent',
 			EventBusName: 'default',
 			Source: cloudevent.source,
 		}))
 
-		console.log({ Entries })
+		const chunkedEntries = cluster(entries, MAX_ENTRIES_PER_COMMAND)
+		const promises = chunkedEntries.map(async Entries => {
+			const command = new PutEventsCommand({ Entries })
+			await client.send(command)
+		})
 
-		// TODO: A single command can only have up to 10 entries.
-		// TODO: So, we need to chunk all entries into groups of 10
-		// TODO: and send them off in indepdnent commands.
-		// const command = new PutEventsCommand({ Entries })
-
-		// await client.send(command)
+		await Promise.all(promises)
 	}
 
 	stage(params) {
