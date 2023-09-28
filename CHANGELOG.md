@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5
+
+Remove `sort-keys` import to see if that fixes error.
+
 ## 0.0.4
 
 * Try fixing build issue with  importing `sort-keys` which is a CommonJS file.
