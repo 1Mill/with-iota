@@ -1,3 +1,4 @@
+import sortKeys from 'sort-keys'
 import { nanoid } from 'nanoid'
 
 // * Actions
@@ -30,7 +31,7 @@ export class Mutation {
 		if (!this.id) { throw new Error('Mutation id is required') }
 		if (typeof this.id !== 'string') { throw new Error('Mutation id must be a string') }
 
-		this.props = props || {}
+		this.props = sortKeys(props || {}, { deep: true })
 		if (typeof this.props !== 'object') { throw new Error('Mutation props must be an object') }
 
 		this.type = type

@@ -4,8 +4,15 @@
   "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
   "source": "src/index.js",
   "type": "module",
+  "exports": {
+    "import": "./dist/index.module.js",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.js"
+  },
+  "jsnext:main": "./dist/index.module.js",
   "main": "./dist/index.cjs",
   "module": "./dist/index.module.js",
+  "umd:main": "./dist/index.umd.js",
   "unpkg": "./dist/index.umd.js",
   "files": [
     "dist",
@@ -42,6 +49,7 @@
     "@aws-sdk/client-eventbridge": "^3.418.0",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
-    "radash": "^11.0.0"
+    "radash": "^11.0.0",
+    "sort-keys": "^5.0.0"
   }
 }

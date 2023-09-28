@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.0.6
+
+* Re-add `sort-keys` functionalaity
+* Throw kitchen sink of `exports` into `package.json` to (try) to load the correct file given the node runtime environment.
+
 ## 0.0.5
 
-Remove `sort-keys` import to see if that fixes error.
+* Remove `sort-keys` import to see if that fixes error.
 
 ## 0.0.4
 
