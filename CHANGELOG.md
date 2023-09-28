@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.3
+
+* Improve `README.md` to describe required environmental variables.
+
 ## 0.0.2
 
 * Fix build issues
