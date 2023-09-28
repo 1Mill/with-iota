@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.4
+
+* Try fixing build issue with  importing `sort-keys` which is a CommonJS file.
+
 ## 0.0.3
 
 * Improve `README.md` to describe required environmental variables.

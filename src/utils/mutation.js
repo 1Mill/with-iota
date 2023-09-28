@@ -1,4 +1,4 @@
-import sortKeys from 'sort-keys'
+import { default as sortKeys } from 'sort-keys'
 import { nanoid } from 'nanoid'
 
 // * Actions
