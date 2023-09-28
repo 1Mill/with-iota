@@ -1,6 +1,6 @@
 {
   "name": "@1mill/with-iota",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
   "source": "src/index.js",
   "type": "module",
