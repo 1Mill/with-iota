@@ -20,20 +20,25 @@ export class MutationState {
 			const collection = await this.mongo.collection(type)
 
 			switch (action) {
-				case CREATE:
+				case CREATE: {
 					await collection.insertOne({ ...props, id }, { session })
 					break
-				case DELETE:
+				}
+				case DELETE: {
 					await collection.deleteOne({ id }, { session })
 					break
-				case INCREMENT:
+				}
+				case INCREMENT: {
 					await collection.updateOne({ id }, { $inc: props }, { session })
 					break
-				case SET:
+				}
+				case SET: {
 					await collection.updateOne({ id }, { $set: props }, { session })
 					break
-				default:
+				}
+				default: {
 					throw new Error(`Mutation action "${action}" for version "${version}" is not implemented`)
+				}
 			}
 		}
 	}
