@@ -2,7 +2,7 @@
   "name": "@1mill/with-iota",
   "version": "0.0.6",
   "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
-  "source": "src/index.js",
+  "source": "./src/index.js",
   "type": "module",
   "exports": {
     "import": "./dist/index.module.js",
@@ -19,7 +19,7 @@
     "src"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && npm run build:browser && npm run build:node",
+    "build": "rm -rf ./dist && npm run build:node",
     "build:browser": "microbundle --format modern,umd --external none",
     "build:node": "microbundle --format cjs,esm",
     "deploy": "npm run build && npm publish",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7
+
+* Do not build browser packages because (1) they do not work with many of the node library and (2) they may be messing with the server packages.
+
 ## 0.0.6
 
 * Re-add `sort-keys` functionalaity

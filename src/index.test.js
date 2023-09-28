@@ -1,4 +1,4 @@
-import { CREATE, DELETE, INCREMENT, SET, withIota } from './index.js'
+import { CREATE, DELETE, INCREMENT, SET, withIota } from '../dist/index.module.js'
 import { Cloudevent } from '@1mill/cloudevents'
 
 const FEATURE_FLAG = 'featureFlags'
