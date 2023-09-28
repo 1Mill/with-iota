@@ -69,7 +69,22 @@
 
 ## Interface
 
-TODO
+**If you ever change any of the values below once they are set, be sure to migrate any saved journal entries to the new settings. If you do not do this, then already processed cloudevents may run again.**
+
+| Environment                       | Required | Types  | Default              | Description                                            |
+|-----------------------------------|----------|--------|----------------------|--------------------------------------------------------|
+| `MILL_IOTA_AWS_ACCESS_KEY_ID`     | yes      | string |                      | AWS Access Key with permissions to AWS EventBridge.    |
+| `MILL_IOTA_AWS_ENDPOINT`          |          | string | Set by AWS           |                                                        |
+| `MILL_IOTA_AWS_REGION`            | yes      | string |                      | Valid AWS Region.                                      |
+| `MILL_IOTA_AWS_SECRET_ACCESS_KEY` | yes      | string |                      | AWS Secret Key with permissions to AWS EventBridge.    |
+| `MILL_IOTA_AWS_SESSION_TOKEN`     |          | string | Set by AWS           | AWS Session Token with permissions to AWS EventBridge. |
+| `MILL_IOTA_EVENTBUS_NAME`         |          | string | `default`            | Name of the AWS EventBridge.                           |
+| `MILL_IOTA_JOURNAL_NAME`          |          | string | `iotaJournalEntries` | Name of the MongoDB collection.                        |
+| `MILL_IOTA_MONGO_DB`              | yes      | string |                      | Name of the MongoDB Database.                          |
+| `MILL_IOTA_MONGO_URI`             | yes      | string |                      | URI of the MongoDB Cluster.                            |
+| `MILL_IOTA_SERVICE_ID`            | yes      | string |                      | Unique name of the service / application itself.       |
+
+During the AWS Lambda runtime, AWS automatically provides all the `MILL_IOTA_AWS_` credentials.
 
 ## Lifecycle
 
