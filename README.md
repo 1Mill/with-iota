@@ -62,9 +62,7 @@
       return cloudevent.id
     }
 
-    export const handler = async (cloudevent, ctx) => await withIota(cloudevent, ctx, { func })
-    // export const handler = async (...args) => await withIota(...args, { func })
-
+    export const handler = async (event, ctx) => await withIota(event, ctx, { func })
     ```
 
 ## Interface

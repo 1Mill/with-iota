@@ -20,13 +20,22 @@ const journal = new JournalState({
 	name: JOURNAL_NAME,
 })
 
-export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
+export const withIota = async (event = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
 	// * AWS from closing the connection. This way, the connection remains
 	// * open and ready for immediate use whenever the next cloudevent
 	// * comes in.
 	// * https://www.mongodb.com/docs/atlas/manage-connections-aws-lambda/#manage-connections-with-aws-lambda
 	ctx.callbackWaitsForEmptyEventLoop = false
+
+	// * If the event is an AWS EventBridge Entry then the cloudevent will
+	// * be in the details. Otherwise, assume the event itself is the
+	// * cloudevent.
+	const cloudevent = event?.detail || event
+
+	if (!cloudevent.id)     { throw new Error('Cloudevent id is required') }
+	if (!cloudevent.source) { throw new Error('Cloudevent source is required') }
+	if (!cloudevent.type)   { throw new Error('Cloudevent type is required') }
 
 	const mutation = new MutationState({ mongo })
 	const rapids   = new RapidsState({
@@ -48,7 +57,14 @@ export const withIota = async (cloudevent = {}, ctx = {}, { func }) => {
 			: rawData
 
 		// * Run business logic.
-		const response = await func({ cloudevent, ctx, data, mutation, rapids })
+		const response = await func({
+			cloudevent,
+			ctx,
+			data,
+			event,
+			mutation,
+			rapids,
+		})
 
 		// * Apply side effects from business logic to the system.
 		const { client } = await mongo.connect()
