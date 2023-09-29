@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.9
+
+* Do JSONify already cloudevents passed AWS EventBridge.
+* Validate the `id`, `source`, and `type` of the invoking `cloudevent` are strings.
+
 ## 0.0.8
 
 * Do not JSONify already JSONified cloudevents passed to AWS EventBridge.

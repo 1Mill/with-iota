@@ -33,9 +33,9 @@ export const withIota = async (event = {}, ctx = {}, { func }) => {
 	// * cloudevent.
 	const cloudevent = event?.detail || event
 
-	if (!cloudevent.id)     { throw new Error('Cloudevent id is required') }
-	if (!cloudevent.source) { throw new Error('Cloudevent source is required') }
-	if (!cloudevent.type)   { throw new Error('Cloudevent type is required') }
+	if (typeof cloudevent.id !== 'string')     { throw new Error('Cloudevent id is required and must be a string') }
+	if (typeof cloudevent.source !== 'string') { throw new Error('Cloudevent source is required and must be a string') }
+	if (typeof cloudevent.type !== 'string')   { throw new Error('Cloudevent type is required and must be a string') }
 
 	const mutation = new MutationState({ mongo })
 	const rapids   = new RapidsState({

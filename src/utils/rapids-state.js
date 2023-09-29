@@ -30,7 +30,7 @@ export class RapidsState {
 		if (this.staged.length <= 0) { return }
 
 		const entries = this.staged.map(cloudevent => ({
-			Detail: cloudevent,
+			Detail: JSON.stringify(cloudevent),
 			DetailType: 'application/cloudevents+json',
 			EventBusName: this.eventBusName,
 			Source: cloudevent.source,

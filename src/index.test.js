@@ -1,4 +1,4 @@
-import { CREATE, DELETE, INCREMENT, SET, withIota } from '../dist/index.module.js'
+import { CREATE, DELETE, INCREMENT, SET, withIota } from './index.js'
 import { Cloudevent } from '@1mill/cloudevents'
 
 const FEATURE_FLAG = 'featureFlags'
@@ -15,11 +15,11 @@ const main = async () => {
 				type: 'cmd.create-feature-flag.v0',
 				wschannel: 'some-prefix:my-channel-name#id=4321',
 			}),
-			id: i % 5, // ! Modify id for testing purposes
+			id: (i % 5).toString(), // ! Modify id for testing purposes
 		}
 
 		const func = async ({ cloudevent, ctx, data, mutation, rapids }) => {
-			if (cloudevent.id === 0) { throw new Error('This error is expected and is testing the JournalState.erase functionality.') }
+			if (cloudevent.id === '0') { throw new Error('This error is expected and is testing the JournalState.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
 			await new Promise((res) => setTimeout(res, sleepForMs))
@@ -71,7 +71,7 @@ const main = async () => {
 			// * Stage multiple cloudevents to be sent to the rapids
 			rapids.stage({
 				data: { id },
-				type: 'cmd.placeholder.v0',
+				type: 'cmd.do-something.v0',
 			})
 
 			rapids.stage({
