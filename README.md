@@ -65,7 +65,9 @@
     export const handler = async (event, ctx) => await withIota(event, ctx, { func })
     ```
 
-## Interface
+## Usage
+
+### Setup
 
 **If you ever change any of the values below once they are set, be sure to migrate any saved journal entries to the new settings. If you do not do this, then already processed cloudevents may run again.**
 
@@ -83,6 +85,21 @@
 | `MILL_IOTA_SERVICE_ID`            | yes      | string |                      | Unique name of the service / application itself.       |
 
 During the AWS Lambda runtime, AWS automatically provides all the `MILL_IOTA_AWS_` credentials.
+
+### Func
+
+| Property       | Type      |Description |
+|----------------|-----------|------------|
+| cloudevent                 | object   | The `cloudevent` payload from `event`. |
+| countDocuments(name, args) | function | Alias for `db.collection(name).countDocuments(args)` using `mongo`. |
+| ctx                        | object   | AWS Lambda `context`. |
+| data                       | any      | The `cloudevent.data`. If `cloudevent.datacontenttype` is `application/json`, then the JSON parsed `data` will be returned. |
+| distinct(name, args)       | function | Alias for `db.collection(name).distinct(args)` using `mongo`. |
+| event                      | object   | The `event` that invoked the AWS Lambda function. |
+| find(name, args)           | function | Alias for `db.collection(name).find(args)` using `mongo`. |
+| findOne(name, args)        | function | Alias for `db.collection(name).findOne(args)` using `mongo`. |
+| mutation.stage(args)       | function | Stage a mutation to be committed after `return`. |
+| rapids.stage(args)         | function | Stage a cloudevent to be sent to `rapids` after `mutations` are applied. |
 
 ## Lifecycle
 

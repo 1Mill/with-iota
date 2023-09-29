@@ -18,7 +18,7 @@ const main = async () => {
 			id: (i % 5).toString(), // ! Modify id for testing purposes
 		}
 
-		const func = async ({ cloudevent, ctx, data, mutation, rapids }) => {
+		const func = async ({ cloudevent, ctx, data, findOne, mutation, rapids }) => {
 			if (cloudevent.id === '0') { throw new Error('This error is expected and is testing the JournalState.erase functionality.') }
 
 			const sleepForMs = Math.floor(Math.random() * 7000)
@@ -78,6 +78,11 @@ const main = async () => {
 				data: { id },
 				type: 'fct.feature-flag-created.v0',
 			})
+
+			// * Get the last journal entry that exists in the database
+			// * before these mutations are applied.
+			const lastFeatureFlag = await findOne('iotaJournalEntries', {}, { sort: { $natural: -1 } })
+			console.log({ lastFeatureFlag })
 
 			return `Created and then deleted feature flag ${name} (${id})`
 		}

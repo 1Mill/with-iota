@@ -20,6 +20,26 @@ const journal = new JournalState({
 	name: JOURNAL_NAME,
 })
 
+const countDocuments = async (collection, ...args) => {
+	const col = await mongo.collection(collection)
+	return col.countDocuments(args)
+}
+
+const distinct = async (collection, args) => {
+	const col = await mongo.collection(collection)
+	return col.distinct(args)
+}
+
+const find = async (collection, args) => {
+	const col = await mongo.collection(collection)
+	return col.find(args)
+}
+
+const findOne = async (collection, args) => {
+	const col = await mongo.collection(collection)
+	return col.findOne(args)
+}
+
 export const withIota = async (event = {}, ctx = {}, { func }) => {
 	// * To reuse database connections between invocations, we must stop
 	// * AWS from closing the connection. This way, the connection remains
@@ -58,12 +78,23 @@ export const withIota = async (event = {}, ctx = {}, { func }) => {
 
 		// * Run business logic.
 		const response = await func({
-			cloudevent,
+			// * AWS Lambda context
 			ctx,
+
+			// * Event context
+			cloudevent,
 			data,
 			event,
+
+			// * Iota state management
 			mutation,
 			rapids,
+
+			// * Mongo read-only helpers
+			countDocuments,
+			distinct,
+			find,
+			findOne,
 		})
 
 		// * Apply side effects from business logic to the system.

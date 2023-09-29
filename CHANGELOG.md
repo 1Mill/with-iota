@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.10
+
+* Add read-only helpers `find`, `findOne`, `distinct`, and `countDocuments` to read database records from `mongo`.
+
 ## 0.0.9
 
 * Do JSONify already cloudevents passed AWS EventBridge.
