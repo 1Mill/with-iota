@@ -2,7 +2,7 @@ import { JournalState } from './journal-state.js'
 import { Mongo } from './mongo.js'
 import { MutationState } from './mutation-state.js'
 import { RapidsState } from './rapids-state.js'
-import { fetchEnv } from './fetchEnv.js'
+import { fetchEnv } from './fetch-env.js'
 
 export const SKIPPED = 'SKIPPED'
 

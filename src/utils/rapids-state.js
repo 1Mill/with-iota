@@ -1,7 +1,7 @@
 import { Cloudevent } from '@1mill/cloudevents'
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
 import { cluster } from 'radash'
-import { fetchEnv } from './fetchEnv.js'
+import { fetchEnv } from './fetch-env.js'
 
 const MAX_ENTRIES_PER_COMMAND = 10
 

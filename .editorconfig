@@ -9,9 +9,16 @@ indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.{key,sops.json}]
+insert_final_newline = false
+
 [*.{md,yaml,yml}]
 indent_size = 2
 indent_style = space
 
-[*.{config,bash,bashrc,hcl,pem,sh,tfvars}]
+[*.{config,bash,bashrc,hcl,pem,rb,sh,tf,tfvars}]
 end_of_line = lf
+
+[{package.json,package-lock.json}]
+indent_size = 2
+indent_style = space

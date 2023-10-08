@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.11
+
+* Fix build for `.cjs` / `require()` syntax.
+
 ## 0.0.10
 
 * Add read-only helpers `find`, `findOne`, `distinct`, and `countDocuments` to read database records from `mongo`.

@@ -1,5 +1,5 @@
-import { CREATE, DELETE, INCREMENT, SET, withIota } from '../dist/index.module.js'
-import { Cloudevent } from '@1mill/cloudevents'
+const { CREATE, DELETE, INCREMENT, SET, withIota } = require('../dist/index.cjs')
+const { Cloudevent } = require('@1mill/cloudevents')
 
 const FEATURE_FLAG = 'featureFlags'
 
