@@ -6,6 +6,8 @@ const FEATURE_FLAG = 'featureFlags'
 const main = async () => {
 	console.log('Starting...')
 
+	setTimeout(() => process.exit(1), 7000)
+
 	const promises = [...Array(20)].map(async (_, i) => {
 		const cloudevent = {
 			...new Cloudevent({
