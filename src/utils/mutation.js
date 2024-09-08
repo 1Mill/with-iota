@@ -26,7 +26,7 @@ export class Mutation {
 		if (!VALID_ACTIONS.includes(this.action)) { throw new Error(`Mutation action "${this.action}" is not valid`) }
 
 		this.id = action === CREATE
-			? id || nanoid()
+			? id || `rn_${nanoid(33)}`
 			: id
 		if (!this.id) { throw new Error('Mutation id is required') }
 		if (typeof this.id !== 'string') { throw new Error('Mutation id must be a string') }

@@ -12,5 +12,5 @@ export const sortObjectKeys = obj => {
 		ordered[key] = sortObjectKeys(obj[key])
 	})
 
-	return ordered;
+	return ordered
 }

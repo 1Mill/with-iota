@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.12
+
+* Add `rn_` prefix to `id` attributes on `CREATE` mutation action.
+* Increase `id` length from `21` to `36` to reduce chance of collisions.
+* Upgrade `@1mill/cloudevents` from `^4.6.1` to `^5.1.0`.
+* Upgrade `@aws-sdk/client-eventbridge` from `^3.418.0` to `^3.645.0`.
+* Upgrade `mongodb` from `^6.1.0` to `^6.8.1`.
+* Upgrade `nanoid` from `^3.3.6` to `^3.3.7`.
+* Upgrade `radash` from `^11.0.0` to `^12.1.0`.
+
 ## 0.0.11
 
 * Fix build for `.cjs` / `require()` syntax.

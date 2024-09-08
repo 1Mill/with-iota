@@ -1,4 +1,4 @@
-import { CREATE, DELETE, INCREMENT, SET, withIota } from '../dist/index.module.js'
+import { CREATE, DELETE, INCREMENT, SET, withIota } from './dist/bundle-node/with-iota.module.js'
 import { Cloudevent } from '@1mill/cloudevents'
 
 const FEATURE_FLAG = 'featureFlags'
@@ -11,7 +11,7 @@ const main = async () => {
 	const promises = [...Array(20)].map(async (_, i) => {
 		const cloudevent = {
 			...new Cloudevent({
-				data: JSON.stringify({ name:`FF#${i}`}),
+				data: { name:`FF#${i}`},
 				originactor: 'user:admin#id=1234',
 				source: 'some-source',
 				type: 'cmd.create-feature-flag.v0',

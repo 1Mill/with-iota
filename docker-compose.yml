@@ -1,14 +1,28 @@
-version: '3.8'
-
 services:
+  node:
+    command: sh -c "echo Hello world!"
+    image: node:20-alpine
+    environment:
+      MILL_IOTA_AWS_ACCESS_KEY_ID: ${MILL_IOTA_AWS_ACCESS_KEY_ID}
+      MILL_IOTA_AWS_REGION: ${MILL_IOTA_AWS_REGION}
+      MILL_IOTA_AWS_SECRET_ACCESS_KEY: ${MILL_IOTA_AWS_SECRET_ACCESS_KEY}
+      MILL_IOTA_MONGO_DB: some-database-name
+      MILL_IOTA_MONGO_URI: mongodb://mongo:27017/
+      MILL_IOTA_SERVICE_ID: some-service-id
+      NPM_TOKEN: ${NPM_TOKEN}
+    volumes:
+      - ./:/app
+    working_dir: /app
+
+
   test:
     command: sh -c "npm install && npm run test"
-    image: node:18-alpine
+    image: node:20-alpine
     environment:
-      MILL_IOTA_AWS_ACCESS_KEY_ID: $MILL_IOTA_AWS_ACCESS_KEY_ID
-      MILL_IOTA_AWS_REGION: $MILL_IOTA_AWS_REGION
-      MILL_IOTA_AWS_SECRET_ACCESS_KEY: $MILL_IOTA_AWS_SECRET_ACCESS_KEY
-      MILL_IOTA_MONGO_DB: some-databse
+      MILL_IOTA_AWS_ACCESS_KEY_ID: ${MILL_IOTA_AWS_ACCESS_KEY_ID}
+      MILL_IOTA_AWS_REGION: ${MILL_IOTA_AWS_REGION}
+      MILL_IOTA_AWS_SECRET_ACCESS_KEY: ${MILL_IOTA_AWS_SECRET_ACCESS_KEY}
+      MILL_IOTA_MONGO_DB: some-database-name
       MILL_IOTA_MONGO_URI: mongodb://mongo:27017/
       MILL_IOTA_SERVICE_ID: some-service-id
     volumes:
@@ -16,7 +30,7 @@ services:
     working_dir: /app
 
   mongo:
-    image: bitnami/mongodb:6.0
+    image: bitnami/mongodb:7.0
     environment:
       ALLOW_EMPTY_PASSWORD: 'yes'
       MONGODB_REPLICA_SET_MODE: primary
@@ -24,12 +38,12 @@ services:
       - mongo-volume:/data/db
 
   mongo-admin:
-    image: mongo-express:1.0.0-alpha.4
+    image: mongo-express:1-20-alpine3.19
     depends_on:
       - mongo
     environment:
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+      ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/?readPreference=primary
     ports:
       - 8081:8081

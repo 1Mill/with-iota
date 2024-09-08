@@ -2,15 +2,15 @@ import { JournalState } from './journal-state.js'
 import { Mongo } from './mongo.js'
 import { MutationState } from './mutation-state.js'
 import { RapidsState } from './rapids-state.js'
-import { fetchEnv } from './fetch-env.js'
+import { fetchEnv } from './fetchEnv.js'
 
-export const SKIPPED = 'SKIPPED'
+const SKIPPED = 'SKIPPED'
 
-const EVENETBUS_NAME = fetchEnv(['MILL_IOTA_EVENTBUS_NAME'], 'default')
-const JOURNAL_NAME   = fetchEnv(['MILL_IOTA_JOURNAL_NAME'], 'iotaJournalEntries')
-const MONGO_DB       = fetchEnv(['MILL_IOTA_MONGO_DB'])
-const MONGO_URI      = fetchEnv(['MILL_IOTA_MONGO_URI'])
-const SERVICE_ID     = fetchEnv(['MILL_IOTA_SERVICE_ID'])
+const EVENETBUS_NAME = fetchEnv({ fallback: 'default', vars: ['MILL_IOTA_EVENTBUS_NAME'] })
+const JOURNAL_NAME   = fetchEnv({ fallback: 'iotaJournalEntries', vars: ['MILL_IOTA_JOURNAL_NAME'] })
+const MONGO_DB       = fetchEnv({ vars: ['MILL_IOTA_MONGO_DB'] })
+const MONGO_URI      = fetchEnv({ vars: ['MILL_IOTA_MONGO_URI'] })
+const SERVICE_ID     = fetchEnv({ vars: ['MILL_IOTA_SERVICE_ID'] })
 
 const mongo = new Mongo({ db: MONGO_DB, uri: MONGO_URI })
 
@@ -101,6 +101,10 @@ export const withIota = async (event = {}, ctx = {}, { func }) => {
 		const { client } = await mongo.connect()
 		const session = client.startSession()
 		try {
+			// TODO: Move rapids.commit() outside of the transaction
+			// TODO: because rpaids events that fail to send can always
+			// TODO: be retried but erasing a journal entry cannot be
+			// TODO: as easily re-done.
 			await session.withTransaction(async () => {
 				await mutation.commit({ session })
 
