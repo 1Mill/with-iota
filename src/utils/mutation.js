@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { sortObjectKeys } from './sort-object-keys'
+import { sortObjectKeys } from './sortObjectKeys'
 
 // * Actions
 export const CREATE = 'create'
@@ -19,7 +19,7 @@ export class Mutation {
 		action,
 		id,
 		props,
-		type,
+		table,
 		version,
 	}) {
 		this.action = action
@@ -34,9 +34,9 @@ export class Mutation {
 		this.props = sortObjectKeys(props || {})
 		if (typeof this.props !== 'object') { throw new Error('Mutation props must be an object') }
 
-		this.type = type
-		if (!this.type) { throw new Error('Mutation type is required') }
-		if (typeof this.type !== 'string') { throw new Error('Mutation id must be a string') }
+		this.table = table
+		if (!this.table) { throw new Error('Mutation table is required') }
+		if (typeof this.table !== 'string') { throw new Error('Mutation table must be a string') }
 
 		this.version = version || v2023_09_27
 		if (!VALID_VERSIONS.includes(this.version)) { throw new Error(`Mutation version "${this.version}" is not valid`) }

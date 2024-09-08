@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0
+
+### Breaking changes
+
+* Change `mutation.type` to `mutation.table`.
+* Run `rapids.commit(...)` outside of `journal.erase(...)` lifecycle, instead of inside, so that connection errors do not erase any committed mutations.
+
 ## 0.0.12
 
 * Add `rn_` prefix to `id` attributes on `CREATE` mutation action.

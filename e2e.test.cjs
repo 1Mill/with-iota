@@ -32,7 +32,7 @@ const main = async () => {
 			const { id } = mutation.stage({
 				action: CREATE,
 				props: { name, enabled: false },
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 
 			// * Add to feature flag count
@@ -40,19 +40,19 @@ const main = async () => {
 				action: INCREMENT,
 				id,
 				props: { count: -1 },
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 			mutation.stage({
 				action: INCREMENT,
 				id,
 				props: { count: -1 },
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 			mutation.stage({
 				action: INCREMENT,
 				id,
 				props: { count: 2 },
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 
 			// * Set attribute to a specific value on the feature flag
@@ -60,14 +60,14 @@ const main = async () => {
 				action: SET,
 				id,
 				props: { hello: 'world' },
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 
 			// * Delete created feature flag
 			mutation.stage({
 				action: DELETE,
 				id,
-				type: FEATURE_FLAG,
+				table: FEATURE_FLAG,
 			})
 
 			// * Stage multiple cloudevents to be sent to the rapids
@@ -83,8 +83,8 @@ const main = async () => {
 
 			// * Get the last journal entry that exists in the database
 			// * before these mutations are applied.
-			const lastFeatureFlag = await findOne('iotaJournalEntries', {}, { sort: { $natural: -1 } })
-			console.log({ lastFeatureFlag })
+			const lastJournalEntry = await findOne('iotaJournalEntries', {}, { sort: { $natural: -1 } })
+			console.log({ lastJournalEntry })
 
 			return `Created and then deleted feature flag ${name} (${id})`
 		}

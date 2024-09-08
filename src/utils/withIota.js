@@ -1,7 +1,7 @@
-import { JournalState } from './journal-state.js'
+import { JournalState } from './journalState.js'
 import { Mongo } from './mongo.js'
-import { MutationState } from './mutation-state.js'
-import { RapidsState } from './rapids-state.js'
+import { MutationState } from './mutationState.js'
+import { RapidsState } from './rapidsState.js'
 import { fetchEnv } from './fetchEnv.js'
 
 const SKIPPED = 'SKIPPED'
@@ -98,23 +98,7 @@ export const withIota = async (event = {}, ctx = {}, { func }) => {
 		})
 
 		// * Apply side effects from business logic to the system.
-		const { client } = await mongo.connect()
-		const session = client.startSession()
-		try {
-			// TODO: Move rapids.commit() outside of the transaction
-			// TODO: because rpaids events that fail to send can always
-			// TODO: be retried but erasing a journal entry cannot be
-			// TODO: as easily re-done.
-			await session.withTransaction(async () => {
-				await mutation.commit({ session })
-
-				// ! Commit rapids after mutations so that any new
-				// ! database values are usable by other services.
-				await rapids.commit()
-			})
-		} finally {
-			await session.endSession();
-		}
+		await mutation.commit()
 
 		// * Mark the journal entry as done.
 		await journal.done({
@@ -130,5 +114,11 @@ export const withIota = async (event = {}, ctx = {}, { func }) => {
 		await journal.erase({ cloudevent })
 
 		throw err
+	} finally {
+		// ! Commit rapids after mutations so that any new
+		// ! database values are usable by other services.
+		// ! Also, commit rapids outside of Journal lifecycle
+		// ! so that any errors don't trigger `journal.erase`.
+		await rapids.commit()
 	}
 }
