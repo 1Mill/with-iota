@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0
+
+* Add `MutationVersion` export.
+
+### Breaking changes
+
+* Wrap `CREATE`, `DELETE`, `INCREMENT`, and `SET` exports under `MutationAction` (e.g. `MutationAction.SET`).
+
 ## 0.1.0
 
 ### Breaking changes

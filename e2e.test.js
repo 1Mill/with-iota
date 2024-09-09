@@ -1,7 +1,7 @@
-import { CREATE, DELETE, INCREMENT, SET, withIota } from './dist/bundle-node/with-iota.module.js'
 import { Cloudevent } from '@1mill/cloudevents'
+import { MutationAction, withIota } from './dist/bundle-node/with-iota.module.js'
 
-const FEATURE_FLAG = 'featureFlags'
+const FEATURE_FLAGS = 'featureFlags'
 
 const main = async () => {
 	console.log('Starting...')
@@ -30,44 +30,44 @@ const main = async () => {
 
 			// * Create feature flag and get generated ID from mutation
 			const { id } = mutation.stage({
-				action: CREATE,
+				action: MutationAction.CREATE,
 				props: { name, enabled: false },
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 
 			// * Add to feature flag count
 			mutation.stage({
-				action: INCREMENT,
+				action: MutationAction.INCREMENT,
 				id,
 				props: { count: -1 },
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 			mutation.stage({
-				action: INCREMENT,
+				action: MutationAction.INCREMENT,
 				id,
 				props: { count: -1 },
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 			mutation.stage({
-				action: INCREMENT,
+				action: MutationAction.INCREMENT,
 				id,
 				props: { count: 2 },
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 
 			// * Set attribute to a specific value on the feature flag
 			mutation.stage({
-				action: SET,
+				action: MutationAction.SET,
 				id,
 				props: { hello: 'world' },
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 
 			// * Delete created feature flag
 			mutation.stage({
-				action: DELETE,
+				action: MutationAction.DELETE,
 				id,
-				table: FEATURE_FLAG,
+				table: FEATURE_FLAGS,
 			})
 
 			// * Stage multiple cloudevents to be sent to the rapids

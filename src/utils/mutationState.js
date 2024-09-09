@@ -1,4 +1,4 @@
-import { CREATE, DELETE, INCREMENT, Mutation, SET } from './mutation.js'
+import { Mutation, MutationAction } from './mutation.js'
 
 export class MutationState {
 	constructor({ mongo }) {
@@ -24,19 +24,19 @@ export class MutationState {
 				const collection = await this.mongo.collection(table)
 
 				switch (action) {
-					case CREATE: {
+					case MutationAction.CREATE: {
 						await collection.insertOne({ ...props, id }, { session })
 						break
 					}
-					case DELETE: {
+					case MutationAction.DELETE: {
 						await collection.deleteOne({ id }, { session })
 						break
 					}
-					case INCREMENT: {
+					case MutationAction.INCREMENT: {
 						await collection.updateOne({ id }, { $inc: props }, { session })
 						break
 					}
-					case SET: {
+					case MutationAction.SET: {
 						await collection.updateOne({ id }, { $set: props }, { session })
 						break
 					}
