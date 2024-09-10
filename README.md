@@ -88,18 +88,18 @@ During the AWS Lambda runtime, AWS automatically provides all the `MILL_IOTA_AWS
 
 ### Func
 
-| Property       | Type      |Description |
-|----------------|-----------|------------|
-| cloudevent                 | object   | The `cloudevent` payload from `event`. |
-| countDocuments(name, args) | function | Alias for `db.collection(name).countDocuments(args)` using `mongo`. |
-| ctx                        | object   | AWS Lambda `context`. |
-| data                       | any      | The `cloudevent.data`. If `cloudevent.datacontenttype` is `application/json`, then the JSON parsed `data` will be returned. |
-| distinct(name, args)       | function | Alias for `db.collection(name).distinct(args)` using `mongo`. |
-| event                      | object   | The `event` that invoked the AWS Lambda function. |
-| find(name, args)           | function | Alias for `db.collection(name).find(args)` using `mongo`. |
-| findOne(name, args)        | function | Alias for `db.collection(name).findOne(args)` using `mongo`. |
-| mutation.stage(args)       | function | Stage a mutation to be committed after `return`. |
-| rapids.stage(args)         | function | Stage a cloudevent to be sent to `rapids` after `mutations` are applied. |
+| Property                   | Type      |Description |
+|----------------------------|-----------|------------|
+| cloudevent                 | object    | The `cloudevent` payload from `event`. |
+| countDocuments(name, args) | function  | Alias for `db.collection(name).countDocuments(args)` using `mongo`. |
+| ctx                        | object    | AWS Lambda `context`. |
+| data                       | any       | The `cloudevent.data`. If `cloudevent.datacontenttype` is `application/json`, then the JSON parsed `data` will be returned. |
+| distinct(name, args)       | function  | Alias for `db.collection(name).distinct(args)` using `mongo`. |
+| event                      | object    | The `event` that invoked the AWS Lambda function. |
+| find(name, args)           | function  | Alias for `db.collection(name).find(args)` using `mongo`. |
+| findOne(name, args)        | function  | Alias for `db.collection(name).findOne(args)` using `mongo`. |
+| mutation.stage(args)       | function  | Stage a mutation to be committed after `return`. |
+| rapids.stage(args)         | function  | Stage a cloudevent to be sent to `rapids` after `mutations` are applied. |
 
 ## Lifecycle
 
