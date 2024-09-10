@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+* Fix TypeScript erorr.
+* Update nested dependencies.
+
 ## 0.2.0
 
 * Add `MutationVersion` export.
