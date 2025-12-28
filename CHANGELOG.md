@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+* Update some packages with `npm audit fix`.
+* Update build and development workspace:
+  * Changed from `node:20-alpine` to `node:22-alpine`
+  * Changed from `bitnami/mongodb:7.0` to `mongo:7` as `bitnami/mongodb:7.0` no longer exists
+
 ## 0.2.1
 
 * Fix TypeScript erorr.
