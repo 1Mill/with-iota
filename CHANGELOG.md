@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0
+
+* Replace `nanoid`, which generaetes unordered identifiers akin to UUID v4, with `uuid` which implements UUID v7 to generate time ordered identifiers to help with database b-tree indexing.
+* Upgraded the below packages:
+  * `@1mill/cloudevents` from `^5` to `^6`
+  * `mongodb` from `^6` to `^7`
+
 ## 0.2.2
 
 * Update some packages with `npm audit fix`.

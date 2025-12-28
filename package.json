@@ -1,6 +1,6 @@
 {
   "name": "@1mill/with-iota",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Idempotently invoke and mutate state using AWS Lambda functions with Cloudevents",
   "source": "./src/index.js",
   "type": "module",
@@ -40,17 +40,17 @@
   },
   "homepage": "https://github.com/1mill/with-iota#readme",
   "dependencies": {
-    "@1mill/cloudevents": "^5.1.0",
-    "@aws-sdk/client-eventbridge": "^3.645.0",
-    "@types/sinon": "^17.0.3",
-    "mongodb": "^6.8.1",
-    "nanoid": "^3.3.7",
-    "radash": "^12.1.0"
+    "@1mill/cloudevents": "^6.0.0",
+    "@aws-sdk/client-eventbridge": "^3.958.0",
+    "mongodb": "^7.0.0",
+    "radash": "^12.1.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.19",
     "@types/mocha": "^10.0.7",
     "@types/node": "^22.5.4",
+    "@types/sinon": "^17.0.3",
     "chai": "^5.1.1",
     "microbundle": "^0.15.1",
     "mocha": "^10.7.3",

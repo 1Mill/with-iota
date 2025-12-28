@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import { v7 as uuidv7 } from 'uuid'
 import { sortObjectKeys } from './sortObjectKeys.js'
 
 export enum MutationAction {
@@ -35,7 +35,7 @@ export class Mutation {
 		this.action = action
 
 		const idValue = action === MutationAction.CREATE
-			? id ?? `rn_${nanoid(33)}`
+			? id ?? `rn_${uuidv7()}`
 			: id
 		if (!idValue) { throw new Error('Mutation id is required') }
 		if (typeof idValue !== 'string') { throw new Error('Mutation id must be a string') }
